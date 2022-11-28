@@ -3,6 +3,7 @@ package com.team8.finalsubmission
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
 
@@ -27,6 +28,16 @@ class MenuActivity : AppCompatActivity(){
             setHasFixedSize(true)
             layoutManager = listManager
             adapter = listAdapter
+        }
+        var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
+        var cartManager = LinearLayoutManager(this)
+        var cartAdapter = MenuListAdapterCart(cart)
+
+        var recyclerCart = menuRecyclerCartView.apply{
+            setHasFixedSize(true)
+            layoutManager = cartManager
+            adapter = cartAdapter
+
         }
     }
 }
