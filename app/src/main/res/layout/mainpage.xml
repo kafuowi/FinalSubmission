@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:layout_width="360dp"
+        android:layout_height="640dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/rabbit" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="처음이세요?"
+            android:textSize="20sp"/>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:text="주문하기"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
