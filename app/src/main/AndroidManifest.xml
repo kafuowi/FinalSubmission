@@ -25,6 +25,18 @@
         <activity android:name=".MenuActivity">
 
         </activity>
+        <activity android:name=".AddMenuActivity">
+
+        </activity>
+        <activity android:name=".MainPageActivity">
+
+        </activity>
+        <activity android:name=".ManageModeChangeNameActivity">
+
+        </activity>
+        <activity android:name=".ManageModeMenuSelectActivity">
+
+        </activity>
     </application>
 
 </manifest>

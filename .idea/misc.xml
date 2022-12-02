@@ -5,9 +5,18 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/activity_select_menu.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/add_menu.xml" value="0.36820652173913043" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/list_grid_item_cart_menu.xml" value="0.23143115942028986" />
         <entry key="app/src/main/res/layout/list_grid_item_menu.xml" value="0.19579533941236069" />
+        <entry key="app/src/main/res/layout/mainpage.xml" value="0.2028985507246377" />
+        <entry key="app/src/main/res/layout/manage_mode_change_name_price.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/manage_mode_menu_selected.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/menudialog.xml" value="0.2028985507246377" />
+        <entry key="app/src/main/res/layout/menudialog_test.xml" value="0.2028985507246377" />
+        <entry key="app/src/main/res/layout/payment_check.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/payment_select.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/pickuppage.xml" value="0.10461956521739131" />
       </map>
     </option>
   </component>
