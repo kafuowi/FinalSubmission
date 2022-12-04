@@ -1,13 +1,18 @@
 package com.team8.finalsubmission
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import kotlinx.android.synthetic.main.list_grid_item_menu.view.*
+import kotlinx.android.synthetic.main.menudialog.view.*
 
 class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<MenuListAdapterGrid.GridAdapter>() {
 
@@ -31,6 +36,35 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
 
         holder.layout.layoutListItem.setOnClickListener {
             Toast.makeText(holder.layout.context, "${list[position]} Click!", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(holder.layout.context)
+            val mDialogView = LayoutInflater.from(holder.layout.context).inflate(R.layout.menudialog, null)
+            builder
+                .setView(mDialogView)
+                .setTitle("Title")
+                .setPositiveButton("Start",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // Start 버튼 선택 시 수행
+                    })
+                .setNegativeButton("Cancel",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // Cancel 버튼 선택 시 수행
+                    })
+// Create the AlertDialog object and return it
+            builder.create()
+            val mAlertDialog=builder.show()
+            var menuCount =0
+            mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+            mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}
+            mDialogView.ButtonMinus.setOnClickListener {
+                if(menuCount>0) {
+                    menuCount -= 1
+                    mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                }
+            }
+            mDialogView.ButtonPlus.setOnClickListener {
+                menuCount+=1
+                mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+            }
         }
     }
 

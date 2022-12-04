@@ -5,10 +5,10 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/backToMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&lt;뒤로가기"
-        />
+        android:text="&lt;뒤로가기" />
 
     <ImageView
     android:layout_width="300dp"
@@ -26,7 +26,7 @@
         >
 
         <Button
-            android:id="@+id/ButtonMinor"
+            android:id="@+id/ButtonMinus"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginRight="30dp"
@@ -35,7 +35,7 @@
         />
 
         <EditText
-            android:id="@+id/MenuNumber"
+            android:id="@+id/MenuNumberMonitor"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:text="1"
