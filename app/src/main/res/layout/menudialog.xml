@@ -11,11 +11,11 @@
         android:text="&lt;뒤로가기" />
 
     <ImageView
-    android:layout_width="300dp"
-    android:layout_height="300dp"
-    android:src="@drawable/cat"
-    android:layout_gravity="center"
-        />
+        android:id="@+id/dialogueImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:src="@drawable/cat" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -32,7 +32,6 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
             .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
             .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
-            .circleCrop() // 동그랗게 자르기
             .into(holder.layout.GridItemImage) // 이미지를 넣을 뷰
 
         holder.layout.layoutListItem.setOnClickListener {
@@ -54,6 +53,13 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
             builder.create()
             val mAlertDialog=builder.show()
             var menuCount =0
+            Glide.with(mDialogView)
+                .load(list[position].imageURL) // 불러올 이미지 url
+                .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
+                .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
+                .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
+
             mDialogView.MenuNumberMonitor.setText(menuCount.toString())
             mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}
             mDialogView.ButtonMinus.setOnClickListener {
