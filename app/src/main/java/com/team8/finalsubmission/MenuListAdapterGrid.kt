@@ -25,6 +25,7 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
     }
 
     override fun onBindViewHolder(holder: GridAdapter, position: Int) {
+        holder.layout.X_button.visibility=View.INVISIBLE
         holder.layout.textListTitle.text = list[position].name
         Glide.with(holder.layout)
             .load(list[position].imageURL) // 불러올 이미지 url
