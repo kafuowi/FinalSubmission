@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ManageModeMenuSelectActivity::class.java)
             startActivity(intent)
         }
+        binding.manageModeEnterButton.setOnClickListener {
+            val intent = Intent(this, ManageModeMainActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }

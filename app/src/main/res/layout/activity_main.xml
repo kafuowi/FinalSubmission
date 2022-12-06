@@ -79,4 +79,16 @@
         app:layout_constraintTop_toBottomOf="@+id/mainpage_enter_button"
         app:layout_constraintVertical_bias="0.165" />
 
+    <Button
+        android:id="@+id/manage_mode_enter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="관리자/메뉴목록"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_name_enter_button"
+        app:layout_constraintVertical_bias="0.152" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,8 +7,10 @@
         <entry key="app/src/main/res/layout/activity_add_menu.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/activity_mainpage.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/activity_manage_mode_menu_selected.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_select_menu.xml" value="0.16" />
         <entry key="app/src/main/res/layout/add_menu.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/dialog_add_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/list_grid_item_cart_menu.xml" value="0.23143115942028986" />
         <entry key="app/src/main/res/layout/list_grid_item_menu.xml" value="0.19579533941236069" />
