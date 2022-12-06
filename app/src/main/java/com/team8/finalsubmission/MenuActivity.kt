@@ -51,11 +51,7 @@ class MenuActivity : AppCompatActivity(){
         var listManager = GridLayoutManager(this, 3)
         var listAdapter = MenuListAdapterGrid(list)
 
-        var recyclerList = menuRecyclerGridView.apply {
-            setHasFixedSize(true)
-            layoutManager = listManager
-            adapter = listAdapter
-        }
+        refreshMenuGrid(listManager,listAdapter)
         var cart: ArrayList<String> =ArrayList<String>()
 
 
@@ -128,11 +124,7 @@ class MenuActivity : AppCompatActivity(){
 
                 })
 
-                var recyclerList = menuRecyclerGridView.apply {
-                    setHasFixedSize(true)
-                    layoutManager = listManager
-                    adapter = listAdapter
-                }
+                refreshMenuGrid(listManager,listAdapter)
 
 
             }
@@ -156,5 +148,12 @@ class MenuActivity : AppCompatActivity(){
 
         }
 
+    }
+    fun refreshMenuGrid(gridManager: GridLayoutManager,gridAdapter: MenuListAdapterGrid){
+        var recyclerList = menuRecyclerGridView.apply {
+            setHasFixedSize(true)
+            layoutManager = gridManager
+            adapter = gridAdapter
+        }
     }
 }
