@@ -18,6 +18,13 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
 
     class GridAdapter(val layout: View): RecyclerView.ViewHolder(layout)
 
+    interface OnItemClickListener{
+        fun onItemClick(v:View, data: String, pos : Int)
+    }
+    private var listener : OnItemClickListener? = null
+    fun setOnItemClickListener(listener : OnItemClickListener) {
+        this.listener = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.list_grid_item_menu, parent, false)
 
@@ -25,7 +32,7 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
     }
 
     override fun onBindViewHolder(holder: GridAdapter, position: Int) {
-        holder.layout.X_button.visibility=View.INVISIBLE
+                holder.layout.X_button.visibility=View.INVISIBLE
         holder.layout.textListTitle.text = list[position].name
         Glide.with(holder.layout)
             .load(list[position].imageURL) // 불러올 이미지 url
@@ -34,8 +41,14 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
             .into(holder.layout.GridItemImage) // 이미지를 넣을 뷰
 
+
         holder.layout.layoutListItem.setOnClickListener {
-            Toast.makeText(holder.layout.context, "${list[position]} Click!", Toast.LENGTH_SHORT).show()
+            listener?.onItemClick(holder.layout,list[position].name,position)
+            //Toast.makeText(holder.layout.context, "${listener.toString()} Click!", Toast.LENGTH_SHORT).show()
+
+        }
+    /*
+        holder.layout.layoutListItem.setOnClickListener {
             val builder = AlertDialog.Builder(holder.layout.context)
             val mDialogView = LayoutInflater.from(holder.layout.context).inflate(R.layout.menudialog, null)
             builder
@@ -72,10 +85,13 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
                 menuCount+=1
                 mDialogView.MenuNumberMonitor.setText(menuCount.toString())
             }
-        }
+        }*/
     }
+
 
     override fun getItemCount(): Int {
         return list.size
     }
+
+
 }

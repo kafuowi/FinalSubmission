@@ -1,10 +1,17 @@
 package com.team8.finalsubmission
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -13,6 +20,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
+import kotlinx.android.synthetic.main.list_grid_item_menu.view.*
+import kotlinx.android.synthetic.main.menudialog.view.*
 
 class MenuActivity : AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
@@ -22,6 +31,8 @@ class MenuActivity : AppCompatActivity(){
 
     lateinit var	databaseMenu: DatabaseReference
     var	itemCount:	Long	=	0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
@@ -45,6 +56,15 @@ class MenuActivity : AppCompatActivity(){
             layoutManager = listManager
             adapter = listAdapter
         }
+        var cart: ArrayList<String> =ArrayList<String>()
+
+
+        //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
+        var cartManager = LinearLayoutManager(this)
+        var cartAdapter = MenuListAdapterCart(cart)
+        refreshCart(cartManager,cartAdapter)
+
+
         databaseMenu.addValueEventListener(object: ValueEventListener {
             override	fun	onDataChange(snapshot: DataSnapshot)	{
                 //binding.textList.setText("")
@@ -62,24 +82,73 @@ class MenuActivity : AppCompatActivity(){
 
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)
+                listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
+                    override fun onItemClick(v: View, data: String, pos: Int) {
+                        Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
+
+                        var menuCount =0
+                        val builder = AlertDialog.Builder(v.context)
+                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)
+                        builder
+                            .setView(mDialogView)
+                            .setTitle("Title")
+                            .setPositiveButton("Start",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    cart.add(data.toString())
+                                    refreshCart(cartManager,cartAdapter)
+
+                                })
+                            .setNegativeButton("Cancel",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    // Cancel 버튼 선택 시 수행
+                                })
+// Create the AlertDialog object and return it
+                        builder.create()
+                        val mAlertDialog=builder.show()
+                        Glide.with(mDialogView)
+                            .load(list[pos].imageURL) // 불러올 이미지 url
+                            .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
+                            .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
+                            .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                            .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
+
+                        mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                        mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}
+                        mDialogView.ButtonMinus.setOnClickListener {
+                            if(menuCount>0) {
+                                menuCount -= 1
+                                mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                            }
+                        }
+                        mDialogView.ButtonPlus.setOnClickListener {
+                            menuCount+=1
+                            mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                        }
+                    }
+
+                })
 
                 var recyclerList = menuRecyclerGridView.apply {
                     setHasFixedSize(true)
                     layoutManager = listManager
                     adapter = listAdapter
                 }
+
+
             }
-            override	fun	onCancelled(error: DatabaseError)	{
-                print(error.message)
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
             }
-        })
+        }
+        )
 
 
 
-        var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
-        var cartManager = LinearLayoutManager(this)
-        var cartAdapter = MenuListAdapterCart(cart)
 
+
+    }
+    fun refreshCart(cartManager :LinearLayoutManager, cartAdapter: MenuListAdapterCart){
         var recyclerCart = menuRecyclerCartView.apply{
             setHasFixedSize(true)
             layoutManager = cartManager
