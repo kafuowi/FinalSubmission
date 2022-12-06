@@ -7,7 +7,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.support.v4.app.INotificationSideChannel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +38,13 @@ import kotlinx.android.synthetic.main.dialog_add_menu.view.*
 import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
 import kotlinx.android.synthetic.main.menudialog.*
 import kotlinx.android.synthetic.main.menudialog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ManageModeMainActivity: AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
@@ -53,6 +61,8 @@ class ManageModeMainActivity: AppCompatActivity(){
     var fbStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
     var	itemCount:	Long	=	0
+    var imageUri:Uri?=null
+    var imageFile :File? = null
 
     companion object{
         const val REVIEW_MIN_LENGTH = 10
@@ -71,11 +81,12 @@ class ManageModeMainActivity: AppCompatActivity(){
             result ->
         if(result.resultCode == RESULT_OK){
             // 이미지를 받으면 ImageView에 적용한다
-            val imageUri = result.data?.data
+            imageUri = result.data?.data
+            imageUri?.let { setUri(it) }
             imageUri?.let{
 
                 // 서버 업로드를 위해 파일 형태로 변환한다
-                var imageFile = File(getRealPathFromURI(it))
+                imageFile = File(getRealPathFromURI(it))
 
                 // 이미지를 불러온다
                 Glide.with(this)
@@ -83,7 +94,10 @@ class ManageModeMainActivity: AppCompatActivity(){
                     .fitCenter()
                     .apply(RequestOptions().override(500,500))
                     .into(DialogView.menu_image_view)
+
+
             }
+
         }
     }
 
@@ -128,7 +142,9 @@ class ManageModeMainActivity: AppCompatActivity(){
             imageResult.launch(intent)
         }
     }
-
+    fun setUri(U:Uri){
+        uriPhoto = U
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,7 +153,6 @@ class ManageModeMainActivity: AppCompatActivity(){
 
         fbStorage = FirebaseStorage.getInstance()
         binding.returnButton.setOnClickListener { //메뉴추가버튼
-            Toast.makeText(this, "메뉴추가", Toast.LENGTH_SHORT).show()
             val IMAGE_PICK=1111
 
             var selectImage: Uri?=null
@@ -145,6 +160,7 @@ class ManageModeMainActivity: AppCompatActivity(){
             mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null)
             DialogView.menu_image_view.setOnClickListener{
                 selectGallery()
+
             }
             builder
                 .setView(DialogView)
@@ -156,10 +172,29 @@ class ManageModeMainActivity: AppCompatActivity(){
                         tempItem.price =
                             DialogView.menu_price_edit_text.text.toString().toDouble().toInt()
                         tempItem.UID = DialogView.menu_name_edit_text.text.toString()
-                        tempItem.imageURL ="https://i.ibb.co/7bMtvXy/image.jpg"
+
                         tempItem.quantity=0
                         tempItem.serving=0
-                        databaseMenu.child(tempItem.UID).setValue(tempItem);
+
+                        if (uriPhoto != null) {
+                            var fileName =
+                                SimpleDateFormat("yyyyMMddHHmmss").format(Date()) // 파일명이 겹치면 안되기 떄문에 시년월일분초 지정
+                            fbStorage!!.reference.child("image").child(fileName)
+                                .putFile(uriPhoto!!)//어디에 업로드할지 지정
+                                .addOnSuccessListener {
+
+                                        taskSnapshot -> // 업로드 정보를 담는다
+                                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { it ->
+                                        tempItem.imageURL = it.toString()
+                                        Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT)
+                                            .show()
+
+                                        databaseMenu.child(tempItem.UID).setValue(tempItem);
+
+                                    }
+                                }
+
+                        }
 
                     })
                 .setNegativeButton("Cancel",
