@@ -1,37 +1,133 @@
 package com.team8.finalsubmission
 
+import android.Manifest
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.ktx.Firebase
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
+import com.team8.finalsubmission.databinding.DialogAddMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
 import kotlinx.android.synthetic.main.activity_select_menu.view.*
 import kotlinx.android.synthetic.main.dialog_add_menu.view.*
 import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
+import kotlinx.android.synthetic.main.menudialog.*
 import kotlinx.android.synthetic.main.menudialog.view.*
+import java.io.File
 
 class ManageModeMainActivity: AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
     private var mBinding: ActivitySelectMenuBinding? = null
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
+    private var mDialogView: View?=null
+    private val DialogView get() = mDialogView!!
+
+
 
     lateinit var	databaseMenu: DatabaseReference
+    var pickImageFromAlbum = 0
+    var fbStorage : FirebaseStorage? = null
+    var uriPhoto : Uri? = null
     var	itemCount:	Long	=	0
+
+    companion object{
+        const val REVIEW_MIN_LENGTH = 10
+        // 갤러리 권한 요청
+        const val REQ_GALLERY = 1
+
+        // API 호출시 Parameter key값
+        const val PARAM_KEY_IMAGE = "image"
+        const val PARAM_KEY_PRODUCT_ID = "product_id"
+        const val PARAM_KEY_REVIEW = "review_content"
+        const val PARAM_KEY_RATING = "rating"
+    }
+    private val imageResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){
+            result ->
+        if(result.resultCode == RESULT_OK){
+            // 이미지를 받으면 ImageView에 적용한다
+            val imageUri = result.data?.data
+            imageUri?.let{
+
+                // 서버 업로드를 위해 파일 형태로 변환한다
+                var imageFile = File(getRealPathFromURI(it))
+
+                // 이미지를 불러온다
+                Glide.with(this)
+                    .load(imageUri)
+                    .fitCenter()
+                    .apply(RequestOptions().override(500,500))
+                    .into(DialogView.menu_image_view)
+            }
+        }
+    }
+
+
+    fun getRealPathFromURI(uri: Uri): String {
+
+        val buildName = Build.MANUFACTURER
+        if (buildName.equals("Xiaomi")) {
+            return uri.path!!
+        }
+        var columnIndex = 0
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, proj, null, null, null)
+        if (cursor!!.moveToFirst()) {
+            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        }
+        val result = cursor.getString(columnIndex)
+        cursor.close()
+        return result
+    }
+
+    private fun selectGallery(){
+        val writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+
+        //권한 확인
+        if(writePermission == PackageManager.PERMISSION_DENIED ||
+            readPermission == PackageManager.PERMISSION_DENIED){
+            // 권한 요청
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE), REQ_GALLERY)
+
+        }else{
+            // 권한이 있는 경우 갤러리 실행
+            val intent = Intent(Intent.ACTION_PICK)
+            // intent의 data와 type을 동시에 설정하는 메서드
+            intent.setDataAndType(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                "image/*"
+            )
+
+            imageResult.launch(intent)
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,24 +135,27 @@ class ManageModeMainActivity: AppCompatActivity(){
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
         binding.returnButton.setText("메뉴추가")
 
+        fbStorage = FirebaseStorage.getInstance()
         binding.returnButton.setOnClickListener { //메뉴추가버튼
             Toast.makeText(this, "메뉴추가", Toast.LENGTH_SHORT).show()
+            val IMAGE_PICK=1111
 
+            var selectImage: Uri?=null
             val builder = AlertDialog.Builder(this)
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null)
-            mDialogView.menu_image_view.setOnClickListener{
-
+            mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null)
+            DialogView.menu_image_view.setOnClickListener{
+                selectGallery()
             }
             builder
-                .setView(mDialogView)
+                .setView(DialogView)
                 .setTitle("Title")
                 .setPositiveButton("Start",
                     DialogInterface.OnClickListener { dialog, id ->
                         val tempItem :MenuData = MenuData()
-                        tempItem.name = mDialogView.menu_name_edit_text.text.toString()
+                        tempItem.name = DialogView.menu_name_edit_text.text.toString()
                         tempItem.price =
-                            mDialogView.menu_price_edit_text.text.toString().toDouble().toInt()
-                        tempItem.UID = mDialogView.menu_name_edit_text.text.toString()
+                            DialogView.menu_price_edit_text.text.toString().toDouble().toInt()
+                        tempItem.UID = DialogView.menu_name_edit_text.text.toString()
                         tempItem.imageURL ="https://i.ibb.co/7bMtvXy/image.jpg"
                         tempItem.quantity=0
                         tempItem.serving=0
