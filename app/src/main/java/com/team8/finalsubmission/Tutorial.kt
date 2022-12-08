@@ -32,6 +32,13 @@ class MenuActivity : AppCompatActivity(){
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
 
+
+    //튜토리얼 fragment
+    lateinit var transaction: FragmentTransaction
+    var presentFragment: Fragment? = null
+    lateinit var fragmentManager : FragmentManager
+
+
     lateinit var	databaseMenu: DatabaseReference
     var	itemCount:	Long	=	0
 
@@ -39,6 +46,25 @@ class MenuActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
+
+
+        //튜토리얼 fragment
+        var firstFragment = TutorialFragment()
+        var secondFragment = TutorialFragment2()
+        var thirdFragment = TutorialFragment3()
+
+        fragmentManager = supportFragmentManager
+
+        replaceTransaction(firstFragment)
+        binding.fragmentTutorial.isClickable;
+
+        binding.fragmentTutorial.setOnClickListener {
+            if(presentFragment==firstFragment){
+                replaceTransaction(secondFragment)
+            }else{
+                replaceTransaction(thirdFragment)
+            }
+        }
 
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
@@ -160,5 +186,17 @@ class MenuActivity : AppCompatActivity(){
             layoutManager = gridManager
             adapter = gridAdapter
         }
+    }
+    //fragment
+    fun	replaceTransaction(fragment:	Fragment)	{
+        if(presentFragment ==	fragment)	{
+            Toast.makeText(this,	"음식을 골라주세요.",
+                Toast.LENGTH_SHORT).show()
+            binding.fragmentTutorial.visibility=View.INVISIBLE
+            return
+        }
+        transaction	=	fragmentManager.beginTransaction()
+        transaction.replace(binding.fragmentTutorial.id, fragment).commit()
+        presentFragment =	fragment
     }
 }
