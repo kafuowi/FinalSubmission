@@ -3,6 +3,10 @@ package com.team8.finalsubmission
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.team8.finalsubmission.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

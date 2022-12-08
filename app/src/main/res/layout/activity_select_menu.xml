@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     android:padding="5dp">
 
+    <FrameLayout
+        android:id="@+id/fragment_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menuRecyclerGridView"
         android:layout_width="300dp"
@@ -38,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
+
 
         <ImageView
             android:id="@+id/imageView2"

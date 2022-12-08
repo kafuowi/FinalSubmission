@@ -91,4 +91,16 @@
         app:layout_constraintTop_toBottomOf="@+id/change_name_enter_button"
         app:layout_constraintVertical_bias="0.152" />
 
+    <Button
+        android:id="@+id/order_tutorial_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="튜토리얼"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.767"
+        app:layout_constraintStart_toStartOf="@+id/manage_mode_enter_button"
+        app:layout_constraintTop_toBottomOf="@+id/activity_manage_mode_menu_enter_button"
+        app:layout_constraintVertical_bias="0.152" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
