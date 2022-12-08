@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_select_menu.*
 import kotlinx.android.synthetic.main.list_grid_item_menu.view.*
 import kotlinx.android.synthetic.main.menudialog.view.*
 
-class MenuActivity : AppCompatActivity(){
+class Tutorial : AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
     private var mBinding: ActivitySelectMenuBinding? = null
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
