@@ -19,7 +19,7 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
     class GridAdapter(val layout: View): RecyclerView.ViewHolder(layout)
 
     interface OnItemClickListener{
-        fun onItemClick(v:View, data: String, pos : Int)
+        fun onItemClick(v:View, data: MenuData, pos : Int)
     }
     private var listener : OnItemClickListener? = null
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -43,7 +43,7 @@ class MenuListAdapterGrid(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
 
 
         holder.layout.layoutListItem.setOnClickListener {
-            listener?.onItemClick(holder.layout,list[position].name,position)
+            listener?.onItemClick(holder.layout,list[position],position)
             //Toast.makeText(holder.layout.context, "${listener.toString()} Click!", Toast.LENGTH_SHORT).show()
 
         }

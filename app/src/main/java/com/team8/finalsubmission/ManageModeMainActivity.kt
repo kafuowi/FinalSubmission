@@ -13,6 +13,7 @@ import android.support.v4.app.INotificationSideChannel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -75,6 +76,7 @@ class ManageModeMainActivity: AppCompatActivity(){
         const val PARAM_KEY_REVIEW = "review_content"
         const val PARAM_KEY_RATING = "rating"
     }
+    lateinit var imageGlideView : ImageView
     private val imageResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ){
@@ -93,7 +95,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                     .load(imageUri)
                     .fitCenter()
                     .apply(RequestOptions().override(500,500))
-                    .into(DialogView.menu_image_view)
+                    .into(imageGlideView)
 
 
             }
@@ -159,6 +161,7 @@ class ManageModeMainActivity: AppCompatActivity(){
             val builder = AlertDialog.Builder(this)
             mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null)
             DialogView.menu_image_view.setOnClickListener{
+                imageGlideView = DialogView.menu_image_view
                 selectGallery()
 
             }
@@ -216,7 +219,7 @@ class ManageModeMainActivity: AppCompatActivity(){
         var listAdapter = MenuListAdapterGrid(list)
 
         refreshMenuGrid(listManager,listAdapter)
-        var cart: ArrayList<String> =ArrayList<String>()
+        var cart: ArrayList<MenuData> =ArrayList<MenuData>()
 
 
         //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
@@ -243,19 +246,36 @@ class ManageModeMainActivity: AppCompatActivity(){
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
-                    override fun onItemClick(v: View, data: String, pos: Int) {
+                    override fun onItemClick(v: View, data: MenuData, pos: Int) {
                         Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
+                        var tempItem = list[pos]
                         val builder = AlertDialog.Builder(v.context)
                         val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.dialog_manage_mode_menu_selected, null)
                         builder
                             .setView(mDialogView)
                             .setTitle("Title")
-                            .setPositiveButton("Start",
+                            .setPositiveButton("확인",
                                 DialogInterface.OnClickListener { dialog, id ->
-                                    cart.add(data.toString())
-                                    refreshCart(cartManager,cartAdapter)
+                                    if (uriPhoto != null) {
+                                        var fileName =
+                                            SimpleDateFormat("yyyyMMddHHmmss").format(Date()) // 파일명이 겹치면 안되기 떄문에 시년월일분초 지정
+                                        fbStorage!!.reference.child("image").child(fileName)
+                                            .putFile(uriPhoto!!)//어디에 업로드할지 지정
+                                            .addOnSuccessListener {
 
+                                                    taskSnapshot -> // 업로드 정보를 담는다
+                                                taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { it ->
+                                                    tempItem.imageURL = it.toString()
+                                                    Toast.makeText(mDialogView.context, it.toString(), Toast.LENGTH_SHORT)
+                                                        .show()
+
+                                                    databaseMenu.child(tempItem.UID).setValue(tempItem);
+
+                                                }
+                                            }
+
+                                    }
                                 })
                             .setNegativeButton("Cancel",
                                 DialogInterface.OnClickListener { dialog, id ->
@@ -270,6 +290,13 @@ class ManageModeMainActivity: AppCompatActivity(){
                             .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
                             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                             .into(mDialogView.selected_menu_image) // 이미지를 넣을 뷰
+
+                        mDialogView.change_image_name.setOnClickListener {
+
+                            imageGlideView = mDialogView.selected_menu_image
+                            selectGallery()
+
+                        }
 
 
                     }
