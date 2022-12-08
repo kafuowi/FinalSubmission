@@ -81,7 +81,7 @@ class Tutorial : AppCompatActivity(){
         var listAdapter = MenuListAdapterGrid(list)
 
         refreshMenuGrid(listManager,listAdapter)
-        var cart: ArrayList<String> =ArrayList<String>()
+        var cart: ArrayList<MenuData> =ArrayList<MenuData>()
 
 
         //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
@@ -110,7 +110,7 @@ class Tutorial : AppCompatActivity(){
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
-                    override fun onItemClick(v: View, data: String, pos: Int) {
+                    override fun onItemClick(v: View, data: MenuData, pos: Int) {
                         Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
                         var menuCount =0
@@ -121,7 +121,7 @@ class Tutorial : AppCompatActivity(){
                             .setTitle("Title")
                             .setPositiveButton("Start",
                                 DialogInterface.OnClickListener { dialog, id ->
-                                    cart.add(data.toString())
+                                    cart.add(data)
                                     refreshCart(cartManager,cartAdapter)
 
                                 })
