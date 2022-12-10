@@ -33,6 +33,7 @@ class MenuActivity : AppCompatActivity(){
     private val binding get() = mBinding!!
 
     lateinit var	databaseMenu: DatabaseReference
+    lateinit var  databaseCategory:DatabaseReference
     var	itemCount:	Long	=	0
 
 
@@ -44,12 +45,43 @@ class MenuActivity : AppCompatActivity(){
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
         databaseMenu	=	Firebase.database.getReference("menu")
-        /*binding.btnPost.setOnClickListener {
-            val name	=	binding.editName.text.toString()
-            val password	=	binding.editPassword.text.toString()
-            val user	=	User(name,	password)
-            addItem(user)
-        }*/
+        databaseCategory = Firebase.database.getReference("menucategory")
+
+        var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
+        var categoryManager = LinearLayoutManager(this)
+        var categoryAdapter = MenuListAdapterCategory(categories)
+
+        refreshCategory(categoryManager,categoryAdapter)
+
+        databaseCategory.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                //binding.textList.setText("")
+                Log.d("Category", "Count:	${snapshot.childrenCount}")
+                itemCount = snapshot.childrenCount
+                categories = ArrayList<CategoryData>()
+                for (item in snapshot.children) {
+                    val key = item.key
+                    val category = item.getValue(CategoryData::class.java)
+                    //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
+                    if (category != null) {
+                        categories.add(category)
+                        Log.d("Category", "Name:	${category.name}")
+                    }
+                }
+                categoryAdapter = MenuListAdapterCategory(categories)
+                refreshCategory(categoryManager,categoryAdapter)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        )
+
+
+
         var list :ArrayList<MenuData> = ArrayList<MenuData>()
         var listManager = GridLayoutManager(this, 3)
         var listAdapter = MenuListAdapterGrid(list)
@@ -160,5 +192,14 @@ class MenuActivity : AppCompatActivity(){
             layoutManager = gridManager
             adapter = gridAdapter
         }
+    }
+    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){
+        var recyclerCategory = MenuCategoryView.apply {
+            setHasFixedSize(true)
+            layoutManager = categoryManager
+            adapter = categoryAdapter
+        }
+        recyclerCategory.layoutManager =
+            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
     }
 }
