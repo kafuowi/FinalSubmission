@@ -43,6 +43,9 @@
         <activity android:name=".ManageModeMenuSelectActivity">
 
         </activity>
+        <activity android:name=".Tutorial">
+
+        </activity>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.team8.finalsubmission.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.manageModeEnterButton.setOnClickListener {
             val intent = Intent(this, ManageModeMainActivity::class.java)
+            startActivity(intent)
+        }
+        binding.orderTutorialEnterButton.setOnClickListener {
+            val intent = Intent(this, Tutorial::class.java)
             startActivity(intent)
         }
 
