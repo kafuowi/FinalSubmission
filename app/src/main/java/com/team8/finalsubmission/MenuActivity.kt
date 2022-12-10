@@ -23,14 +23,22 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
+import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
 import kotlinx.android.synthetic.main.list_grid_item_menu.view.*
 import kotlinx.android.synthetic.main.menudialog.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MenuActivity : AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
     private var mBinding: ActivitySelectMenuBinding? = null
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
+
+    lateinit var cartAdapter : MenuListAdapterCart
+    lateinit var cartManager : LinearLayoutManager
+    lateinit var cart: ArrayList<MenuData>
 
     lateinit var	databaseMenu: DatabaseReference
     lateinit var  databaseCategory:DatabaseReference
@@ -40,6 +48,7 @@ class MenuActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
+        binding.CategoryAddButton.visibility = View.INVISIBLE
 
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
@@ -47,11 +56,27 @@ class MenuActivity : AppCompatActivity(){
         databaseMenu	=	Firebase.database.getReference("menu")
         databaseCategory = Firebase.database.getReference("menucategory")
 
+        var list :ArrayList<MenuData> = ArrayList<MenuData>()
+        var listManager = GridLayoutManager(this, 3)
+        var listAdapter = MenuListAdapterGrid(list)
+
+        refreshMenuGrid(listManager,listAdapter)
+
         var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
         var categoryManager = LinearLayoutManager(this)
         var categoryAdapter = MenuListAdapterCategory(categories)
 
         refreshCategory(categoryManager,categoryAdapter)
+        cart  = ArrayList<MenuData>()
+
+
+        //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
+         cartManager = LinearLayoutManager(this)
+         cartAdapter = MenuListAdapterCart(cart)
+        refreshCart(cartManager,cartAdapter)
+
+
+        fragment_tutorial.bringToFront()
 
         databaseCategory.addValueEventListener(object :ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -71,6 +96,22 @@ class MenuActivity : AppCompatActivity(){
                 }
                 categoryAdapter = MenuListAdapterCategory(categories)
                 refreshCategory(categoryManager,categoryAdapter)
+
+                categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
+                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {
+                        Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
+                            .show()
+
+                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}")
+                        refreshGridData(listManager,listAdapter)
+                    }
+
+                }
+                )
+
+                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")
+
+                refreshGridData(listManager,listAdapter)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -82,21 +123,7 @@ class MenuActivity : AppCompatActivity(){
 
 
 
-        var list :ArrayList<MenuData> = ArrayList<MenuData>()
-        var listManager = GridLayoutManager(this, 3)
-        var listAdapter = MenuListAdapterGrid(list)
 
-        refreshMenuGrid(listManager,listAdapter)
-        var cart: ArrayList<MenuData> =ArrayList<MenuData>()
-
-
-        //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
-        var cartManager = LinearLayoutManager(this)
-        var cartAdapter = MenuListAdapterCart(cart)
-        refreshCart(cartManager,cartAdapter)
-
-
-        fragment_tutorial.bringToFront()
 
         databaseMenu.addValueEventListener(object: ValueEventListener {
             override	fun	onDataChange(snapshot: DataSnapshot)	{
@@ -201,5 +228,84 @@ class MenuActivity : AppCompatActivity(){
         }
         recyclerCategory.layoutManager =
             LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+    }
+
+    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+
+        var listAdapter =gridAdapter
+        var listManager = gridManager
+        databaseMenu.addValueEventListener(object: ValueEventListener {
+            override	fun	onDataChange(snapshot: DataSnapshot)	{
+                //binding.textList.setText("")
+                Log.d("Fire",	"Count:	${snapshot.childrenCount}")
+                itemCount =	snapshot.childrenCount
+                var list = ArrayList<MenuData>()
+                for(item	in	snapshot.children)	{
+                    val key	=	item.key
+                    val menu	=	item.getValue(MenuData::class.java)
+                    //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
+                    if (menu != null) {
+                        list.add(menu)
+                    }
+                }
+
+                Log.d("Fire1",	"Count:	")
+                listAdapter = MenuListAdapterGrid(list)
+                listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
+                    override fun onItemClick(v: View, data: MenuData, pos: Int) {
+                        Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
+
+                        var menuCount =0
+                        val builder = AlertDialog.Builder(v.context)
+                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)
+                        builder
+                            .setView(mDialogView)
+                            .setTitle("Title")
+                            .setPositiveButton("Start",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    cart.add(data)
+                                    refreshCart(cartManager,cartAdapter)
+
+                                })
+                            .setNegativeButton("Cancel",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    // Cancel 버튼 선택 시 수행
+                                })
+// Create the AlertDialog object and return it
+                        builder.create()
+                        val mAlertDialog=builder.show()
+                        Glide.with(mDialogView)
+                            .load(list[pos].imageURL) // 불러올 이미지 url
+                            .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
+                            .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
+                            .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                            .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
+
+                        mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                        mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}
+                        mDialogView.ButtonMinus.setOnClickListener {
+                            if(menuCount>0) {
+                                menuCount -= 1
+                                mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                            }
+                        }
+                        mDialogView.ButtonPlus.setOnClickListener {
+                            menuCount+=1
+                            mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                        }
+                    }
+
+                })
+
+                refreshMenuGrid(listManager,listAdapter)
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        )
     }
 }

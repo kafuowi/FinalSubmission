@@ -35,6 +35,7 @@ import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
 import com.team8.finalsubmission.databinding.DialogAddMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
 import kotlinx.android.synthetic.main.activity_select_menu.view.*
+import kotlinx.android.synthetic.main.dialog_add_category.view.*
 import kotlinx.android.synthetic.main.dialog_add_menu.view.*
 import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
 import kotlinx.android.synthetic.main.menudialog.*
@@ -54,10 +55,13 @@ class ManageModeMainActivity: AppCompatActivity(){
     private val binding get() = mBinding!!
     private var mDialogView: View?=null
     private val DialogView get() = mDialogView!!
+    private var mDialogViewCategory: View?=null
+    private val DialogViewCategory get()=mDialogViewCategory!!
 
 
 
     lateinit var	databaseMenu: DatabaseReference
+    lateinit var  databaseCategory: DatabaseReference
     var pickImageFromAlbum = 0
     var fbStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
@@ -153,7 +157,36 @@ class ManageModeMainActivity: AppCompatActivity(){
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
         binding.returnButton.setText("메뉴추가")
 
+        //카테고리 추가 버튼
+
         fbStorage = FirebaseStorage.getInstance()
+        binding.CategoryAddButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            mDialogViewCategory = LayoutInflater.from(this).inflate(R.layout.dialog_add_category, null)
+
+            builder
+                .setView(DialogViewCategory)
+                .setTitle("Title")
+                .setPositiveButton("Start",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // Start 버튼 선택 시 수행
+                        val tempItem :CategoryData = CategoryData()
+                        tempItem.name = DialogViewCategory.category_name_edit_text.text.toString()
+                        tempItem.UID = DialogViewCategory.category_UID_edit_text.text.toString()
+                        databaseCategory.child(tempItem.UID).setValue(tempItem);
+
+
+                    })
+                .setNegativeButton("Cancel",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // Cancel 버튼 선택 시 수행
+                    })
+// Create the AlertDialog object and return it
+            builder.create()
+            val mAlertDialog=builder.show()
+
+        }
+
         binding.returnButton.setOnClickListener { //메뉴추가버튼
             val IMAGE_PICK=1111
 
@@ -212,7 +245,7 @@ class ManageModeMainActivity: AppCompatActivity(){
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
-        databaseMenu	=	Firebase.database.getReference("menu")
+        databaseCategory	=	Firebase.database.getReference("menucategory")
 
         var list :ArrayList<MenuData> = ArrayList<MenuData>()
         var listManager = GridLayoutManager(this, 3)
@@ -227,13 +260,97 @@ class ManageModeMainActivity: AppCompatActivity(){
         var cartAdapter = MenuListAdapterCart(cart)
         refreshCart(cartManager,cartAdapter)
 
+        var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
+        var categoryManager = LinearLayoutManager(this)
+        var categoryAdapter = MenuListAdapterCategory(categories)
 
+        refreshCategory(categoryManager,categoryAdapter)
+        databaseCategory.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                //binding.textList.setText("")
+                Log.d("Category", "Count:	${snapshot.childrenCount}")
+                itemCount = snapshot.childrenCount
+                categories = ArrayList<CategoryData>()
+                for (item in snapshot.children) {
+                    val key = item.key
+                    val category = item.getValue(CategoryData::class.java)
+                    //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
+                    if (category != null) {
+                        categories.add(category)
+                        Log.d("Category", "Name:	${category.name}")
+                    }
+                }
+                categoryAdapter = MenuListAdapterCategory(categories)
+                refreshCategory(categoryManager, categoryAdapter)
+                categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
+                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {
+                        Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
+                            .show()
+
+                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}")
+                        refreshGridData(listManager,listAdapter)
+                    }
+
+                }
+                )
+
+                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")
+
+                refreshGridData(listManager,listAdapter)
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        )
+
+
+
+
+
+
+    }
+    fun refreshCart(cartManager : LinearLayoutManager, cartAdapter: MenuListAdapterCart){
+        var recyclerCart = menuRecyclerCartView.apply{
+            setHasFixedSize(true)
+            layoutManager = cartManager
+            adapter = cartAdapter
+
+        }
+
+    }
+    fun refreshMenuGrid(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+        var recyclerList = menuRecyclerGridView.apply {
+            setHasFixedSize(true)
+            layoutManager = gridManager
+            adapter = gridAdapter
+        }
+    }
+    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){
+        var recyclerCategory = MenuCategoryView.apply {
+            setHasFixedSize(true)
+            layoutManager = categoryManager
+            adapter = categoryAdapter
+        }
+        recyclerCategory.layoutManager =
+            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+    }
+    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+
+        var listAdapter =gridAdapter
+        var listManager = gridManager
         databaseMenu.addValueEventListener(object: ValueEventListener {
             override	fun	onDataChange(snapshot: DataSnapshot)	{
                 //binding.textList.setText("")
                 Log.d("Fire",	"Count:	${snapshot.childrenCount}")
                 itemCount =	snapshot.childrenCount
-                list = ArrayList<MenuData>()
+                var list = ArrayList<MenuData>()
                 for(item	in	snapshot.children)	{
                     val key	=	item.key
                     val menu	=	item.getValue(MenuData::class.java)
@@ -313,26 +430,5 @@ class ManageModeMainActivity: AppCompatActivity(){
             }
         }
         )
-
-
-
-
-
-    }
-    fun refreshCart(cartManager : LinearLayoutManager, cartAdapter: MenuListAdapterCart){
-        var recyclerCart = menuRecyclerCartView.apply{
-            setHasFixedSize(true)
-            layoutManager = cartManager
-            adapter = cartAdapter
-
-        }
-
-    }
-    fun refreshMenuGrid(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
-        var recyclerList = menuRecyclerGridView.apply {
-            setHasFixedSize(true)
-            layoutManager = gridManager
-            adapter = gridAdapter
-        }
     }
 }
