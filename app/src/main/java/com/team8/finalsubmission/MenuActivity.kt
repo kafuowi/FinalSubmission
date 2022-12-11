@@ -38,10 +38,10 @@ class MenuActivity : AppCompatActivity(){
 
     lateinit var cartAdapter : MenuListAdapterCart
     lateinit var cartManager : LinearLayoutManager
-    lateinit var cart: ArrayList<MenuData>
+    lateinit var cart: ArrayList<MenuData> // 카트 데이터 배열
 
-    lateinit var	databaseMenu: DatabaseReference
-    lateinit var  databaseCategory:DatabaseReference
+    lateinit var	databaseMenu: DatabaseReference //메뉴 데이터베이스
+    lateinit var  databaseCategory:DatabaseReference //카테고리 데이터베이스
     var	itemCount:	Long	=	0
 
 
@@ -60,26 +60,25 @@ class MenuActivity : AppCompatActivity(){
         var listManager = GridLayoutManager(this, 3)
         var listAdapter = MenuListAdapterGrid(list)
 
-        refreshMenuGrid(listManager,listAdapter)
+        refreshMenuGrid(listManager,listAdapter)//메뉴 그리드 갱신
 
         var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
         var categoryManager = LinearLayoutManager(this)
         var categoryAdapter = MenuListAdapterCategory(categories)
 
-        refreshCategory(categoryManager,categoryAdapter)
-        cart  = ArrayList<MenuData>()
+        refreshCategory(categoryManager,categoryAdapter)//카테고리 리스트 갱신
+        cart  = ArrayList<MenuData>()// 장바구니 데이터 변수
 
 
-        //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
-         cartManager = LinearLayoutManager(this)
-         cartAdapter = MenuListAdapterCart(cart)
+         cartManager = LinearLayoutManager(this)//장바구니 리스트 매니저
+         cartAdapter = MenuListAdapterCart(cart)//장바구니 어댑터 매니저
         refreshCart(cartManager,cartAdapter)
 
 
         fragment_tutorial.bringToFront()
 
         databaseCategory.addValueEventListener(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(snapshot: DataSnapshot) {//데이터가 바뀔 때
 
                 //binding.textList.setText("")
                 Log.d("Category", "Count:	${snapshot.childrenCount}")
@@ -94,24 +93,24 @@ class MenuActivity : AppCompatActivity(){
                         Log.d("Category", "Name:	${category.name}")
                     }
                 }
-                categoryAdapter = MenuListAdapterCategory(categories)
-                refreshCategory(categoryManager,categoryAdapter)
+                categoryAdapter = MenuListAdapterCategory(categories)//카테고리 adapter
+                refreshCategory(categoryManager,categoryAdapter)//카테고리 새로고침
 
                 categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
-                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {
+                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {//카테고리 선택 click listener
                         Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
                             .show()
 
-                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}")
-                        refreshGridData(listManager,listAdapter)
+                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}")//클릭한 카테고리 데이터베이스 가져오기
+                        refreshGridData(listManager,listAdapter)//메뉴 그리드 갱신
                     }
 
                 }
                 )
 
-                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")
+                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")//0번째 카테고리 데이터베이스 가져오기
 
-                refreshGridData(listManager,listAdapter)
+                refreshGridData(listManager,listAdapter)//메뉴 그리드 갱신
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -129,7 +128,7 @@ class MenuActivity : AppCompatActivity(){
 
 
     }
-    fun refreshCart(cartManager :LinearLayoutManager, cartAdapter: MenuListAdapterCart){
+    fun refreshCart(cartManager :LinearLayoutManager, cartAdapter: MenuListAdapterCart){// 카트 새로고침
         var recyclerCart = menuRecyclerCartView.apply{
             setHasFixedSize(true)
             layoutManager = cartManager
@@ -138,14 +137,14 @@ class MenuActivity : AppCompatActivity(){
         }
 
     }
-    fun refreshMenuGrid(gridManager: GridLayoutManager,gridAdapter: MenuListAdapterGrid){
+    fun refreshMenuGrid(gridManager: GridLayoutManager,gridAdapter: MenuListAdapterGrid){// 메뉴 그리드 새로고침
         var recyclerList = menuRecyclerGridView.apply {
             setHasFixedSize(true)
             layoutManager = gridManager
             adapter = gridAdapter
         }
     }
-    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){
+    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){// 카테고리 새로고침
         var recyclerCategory = MenuCategoryView.apply {
             setHasFixedSize(true)
             layoutManager = categoryManager
@@ -155,12 +154,12 @@ class MenuActivity : AppCompatActivity(){
             LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
     }
 
-    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){//메뉴 그리드 데이터 새로고침
 
         var listAdapter =gridAdapter
         var listManager = gridManager
         databaseMenu.addValueEventListener(object: ValueEventListener {
-            override	fun	onDataChange(snapshot: DataSnapshot)	{
+            override	fun	onDataChange(snapshot: DataSnapshot)	{//데이터가 바뀔 때
                 //binding.textList.setText("")
                 Log.d("Fire",	"Count:	${snapshot.childrenCount}")
                 itemCount =	snapshot.childrenCount
@@ -177,17 +176,18 @@ class MenuActivity : AppCompatActivity(){
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
-                    override fun onItemClick(v: View, data: MenuData, pos: Int) {
+                    override fun onItemClick(v: View, data: MenuData, pos: Int) {//그리드 아이템 click listener
                         Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
                         var menuCount =0
                         val builder = AlertDialog.Builder(v.context)
-                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)
+                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)//dialog inflater
                         builder
                             .setView(mDialogView)
                             .setTitle("Title")
                             .setPositiveButton("Start",
                                 DialogInterface.OnClickListener { dialog, id ->
+                                    // Start 버튼 선택 시 수행
                                     cart.add(data)
                                     refreshCart(cartManager,cartAdapter)
 
@@ -197,7 +197,7 @@ class MenuActivity : AppCompatActivity(){
                                     // Cancel 버튼 선택 시 수행
                                 })
 // Create the AlertDialog object and return it
-                        builder.create()
+                        builder.create()//dialog 생성
                         val mAlertDialog=builder.show()
                         Glide.with(mDialogView)
                             .load(list[pos].imageURL) // 불러올 이미지 url
@@ -206,15 +206,15 @@ class MenuActivity : AppCompatActivity(){
                             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                             .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
 
-                        mDialogView.MenuNumberMonitor.setText(menuCount.toString())
-                        mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}
-                        mDialogView.ButtonMinus.setOnClickListener {
+                        mDialogView.MenuNumberMonitor.setText(menuCount.toString())//dialog 메뉴 개수 출력
+                        mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}//dialog 메뉴 뒤로가기
+                        mDialogView.ButtonMinus.setOnClickListener {//dialog 메뉴 개수 감소
                             if(menuCount>0) {
                                 menuCount -= 1
                                 mDialogView.MenuNumberMonitor.setText(menuCount.toString())
                             }
                         }
-                        mDialogView.ButtonPlus.setOnClickListener {
+                        mDialogView.ButtonPlus.setOnClickListener {//dialog 메뉴 개수 증가
                             menuCount+=1
                             mDialogView.MenuNumberMonitor.setText(menuCount.toString())
                         }

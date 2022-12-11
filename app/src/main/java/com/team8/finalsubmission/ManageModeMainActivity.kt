@@ -195,7 +195,7 @@ class ManageModeMainActivity: AppCompatActivity(){
             mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_menu, null)
             DialogView.menu_image_view.setOnClickListener{
                 imageGlideView = DialogView.menu_image_view
-                selectGallery()
+                selectGallery()// 갤러리에서 사진 선택
 
             }
             builder
@@ -247,18 +247,21 @@ class ManageModeMainActivity: AppCompatActivity(){
         setContentView(binding.root)
         databaseCategory	=	Firebase.database.getReference("menucategory")
 
-        var list :ArrayList<MenuData> = ArrayList<MenuData>()
-        var listManager = GridLayoutManager(this, 3)
-        var listAdapter = MenuListAdapterGrid(list)
+        var list :ArrayList<MenuData> = ArrayList<MenuData>() //메뉴 데이터 초기화
+        var listManager = GridLayoutManager(this, 3)//메뉴 그리드 매니저
+        var listAdapter = MenuListAdapterGrid(list)// 메뉴 리스트 어댑터
 
-        refreshMenuGrid(listManager,listAdapter)
-        var cart: ArrayList<MenuData> =ArrayList<MenuData>()
+        refreshMenuGrid(listManager,listAdapter)//메뉴 그리드 새로고침
 
 
-        //var cart = arrayListOf("Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8")
-        var cartManager = LinearLayoutManager(this)
-        var cartAdapter = MenuListAdapterCart(cart)
-        refreshCart(cartManager,cartAdapter)
+        var cart: ArrayList<MenuData> =ArrayList<MenuData>()//카트 데이터
+
+
+        var cartManager = LinearLayoutManager(this)//카트 레이아웃 매니저
+        var cartAdapter = MenuListAdapterCart(cart)// 카트 어댑터
+
+
+        refreshCart(cartManager,cartAdapter)//카트 새로고침
 
         var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
         var categoryManager = LinearLayoutManager(this)
@@ -266,14 +269,14 @@ class ManageModeMainActivity: AppCompatActivity(){
 
         refreshCategory(categoryManager,categoryAdapter)
         databaseCategory.addValueEventListener(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(snapshot: DataSnapshot) {//데이터가 바뀔 때
 
 
                 //binding.textList.setText("")
                 Log.d("Category", "Count:	${snapshot.childrenCount}")
                 itemCount = snapshot.childrenCount
                 categories = ArrayList<CategoryData>()
-                for (item in snapshot.children) {
+                for (item in snapshot.children) {//스냅샷의 모든 아이템 조회
                     val key = item.key
                     val category = item.getValue(CategoryData::class.java)
                     //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
@@ -285,20 +288,20 @@ class ManageModeMainActivity: AppCompatActivity(){
                 categoryAdapter = MenuListAdapterCategory(categories)
                 refreshCategory(categoryManager, categoryAdapter)
                 categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
-                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {
+                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {//카테고리 click listener
                         Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
                             .show()
 
-                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}")
-                        refreshGridData(listManager,listAdapter)
+                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}") //클릭한 카테고리 데이터베이스 가져오기
+                        refreshGridData(listManager,listAdapter)// 그리드 새로고침
                     }
 
                 }
                 )
 
-                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")
+                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")//0번째 카테고리 데이터베이스 가져오기
 
-                refreshGridData(listManager,listAdapter)
+                refreshGridData(listManager,listAdapter)//그리드 새로고침
 
 
             }
@@ -316,7 +319,7 @@ class ManageModeMainActivity: AppCompatActivity(){
 
 
     }
-    fun refreshCart(cartManager : LinearLayoutManager, cartAdapter: MenuListAdapterCart){
+    fun refreshCart(cartManager : LinearLayoutManager, cartAdapter: MenuListAdapterCart){//카트 새로고침
         var recyclerCart = menuRecyclerCartView.apply{
             setHasFixedSize(true)
             layoutManager = cartManager
@@ -325,14 +328,14 @@ class ManageModeMainActivity: AppCompatActivity(){
         }
 
     }
-    fun refreshMenuGrid(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+    fun refreshMenuGrid(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){//메뉴 그리드 새로고침
         var recyclerList = menuRecyclerGridView.apply {
             setHasFixedSize(true)
             layoutManager = gridManager
             adapter = gridAdapter
         }
     }
-    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){
+    fun refreshCategory(categoryManager: LinearLayoutManager, categoryAdapter: MenuListAdapterCategory){//카테고리 새로고침
         var recyclerCategory = MenuCategoryView.apply {
             setHasFixedSize(true)
             layoutManager = categoryManager
@@ -341,12 +344,12 @@ class ManageModeMainActivity: AppCompatActivity(){
         recyclerCategory.layoutManager =
             LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
     }
-    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){
+    fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){//메뉴 그리드 데이터 새로고침
 
         var listAdapter =gridAdapter
         var listManager = gridManager
         databaseMenu.addValueEventListener(object: ValueEventListener {
-            override	fun	onDataChange(snapshot: DataSnapshot)	{
+            override	fun	onDataChange(snapshot: DataSnapshot)	{//데이터가 바뀔 때
                 //binding.textList.setText("")
                 Log.d("Fire",	"Count:	${snapshot.childrenCount}")
                 itemCount =	snapshot.childrenCount
@@ -363,7 +366,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
-                    override fun onItemClick(v: View, data: MenuData, pos: Int) {
+                    override fun onItemClick(v: View, data: MenuData, pos: Int) {//메뉴 아이템 click listener
                         Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
                         var tempItem = list[pos]
@@ -374,6 +377,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                             .setTitle("Title")
                             .setPositiveButton("확인",
                                 DialogInterface.OnClickListener { dialog, id ->
+                                    // 확인 버튼 선택 시 수행
                                     if (uriPhoto != null) {
                                         var fileName =
                                             SimpleDateFormat("yyyyMMddHHmmss").format(Date()) // 파일명이 겹치면 안되기 떄문에 시년월일분초 지정
@@ -408,9 +412,9 @@ class ManageModeMainActivity: AppCompatActivity(){
                             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                             .into(mDialogView.selected_menu_image) // 이미지를 넣을 뷰
 
-                        mDialogView.change_image_name.setOnClickListener {
+                        mDialogView.change_image_name.setOnClickListener {//이미지 클릭 listener
 
-                            imageGlideView = mDialogView.selected_menu_image
+                            imageGlideView = mDialogView.selected_menu_image//
                             selectGallery()
 
                         }
