@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_main)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
 
+        var qrCodeScan = QRCodeScan(this)
+
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
@@ -53,7 +55,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Tutorial::class.java)
             startActivity(intent)
         }
-
+        binding.scanQrButton.setOnClickListener{
+            qrCodeScan.startQRScan()
+        }
     }
 }
 //test
