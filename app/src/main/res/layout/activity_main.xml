@@ -98,9 +98,21 @@
         android:text="튜토리얼"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.767"
+        app:layout_constraintHorizontal_bias="0.56"
         app:layout_constraintStart_toStartOf="@+id/manage_mode_enter_button"
         app:layout_constraintTop_toBottomOf="@+id/activity_manage_mode_menu_enter_button"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintVertical_bias="0.159" />
+
+    <Button
+        android:id="@+id/scan_qr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QR 인식"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toStartOf="@+id/order_tutorial_enter_button"
+        app:layout_constraintTop_toBottomOf="@+id/activity_manage_mode_menu_enter_button"
+        app:layout_constraintVertical_bias="0.159" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
