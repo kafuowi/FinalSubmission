@@ -51,6 +51,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/return_to_menu_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="236dp"
@@ -59,6 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
+        android:id="@+id/continue_payment_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"

@@ -3,6 +3,7 @@ package com.team8.finalsubmission
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,10 +50,19 @@ class MenuActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         mBinding = ActivitySelectMenuBinding.inflate(layoutInflater)
         binding.CategoryAddButton.visibility = View.INVISIBLE
+        binding.returnButton.text = "결제"
 
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
+
+        binding.returnButton.setOnClickListener {
+            val intent = Intent(this, PaymentCheckActivity::class.java)
+            intent.putExtra("cart",cart )
+            startActivity(intent)
+        }
+
+
         databaseMenu	=	Firebase.database.getReference("menu")
         databaseCategory = Firebase.database.getReference("menucategory")
 
