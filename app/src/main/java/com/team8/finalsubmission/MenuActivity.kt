@@ -195,6 +195,7 @@ class MenuActivity : AppCompatActivity(){
                         var menuCount =0
                         val builder = AlertDialog.Builder(v.context)
                         val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)//dialog inflater
+
                         builder
                             .setView(mDialogView)
                             .setTitle("Title")
@@ -213,13 +214,14 @@ class MenuActivity : AppCompatActivity(){
 // Create the AlertDialog object and return it
                         builder.create()//dialog 생성
                         val mAlertDialog=builder.show()
+
+                        mDialogView.priceView.setText(data.price.toString()+" 원")
                         Glide.with(mDialogView)
                             .load(list[pos].imageURL) // 불러올 이미지 url
                             .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
                             .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
                             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                             .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
-
                         mDialogView.MenuNumberMonitor.setText(menuCount.toString())//dialog 메뉴 개수 출력
                         mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}//dialog 메뉴 뒤로가기
                         mDialogView.ButtonMinus.setOnClickListener {//dialog 메뉴 개수 감소

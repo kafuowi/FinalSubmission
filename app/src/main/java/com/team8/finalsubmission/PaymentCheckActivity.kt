@@ -38,6 +38,11 @@ class PaymentCheckActivity: AppCompatActivity() {
         cartManager = LinearLayoutManager(this)//장바구니 리스트 매니저
         cartAdapter = MenuListAdapterCart(cart)//장바구니 어댑터 매니저
         refreshCart(cartManager,cartAdapter)
+        var totalprice =0
+        for(i in cart){
+            totalprice+= i.price*i.select_count
+        }
+        binding.totalPriceView.setText("총 "+totalprice.toString()+" 원")
 
 
     }
