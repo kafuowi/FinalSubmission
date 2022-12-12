@@ -78,7 +78,7 @@ class MenuActivity : AppCompatActivity(){
 
          cartManager = LinearLayoutManager(this)//장바구니 리스트 매니저
          cartAdapter = MenuListAdapterCart(cart)//장바구니 어댑터 매니저
-        cartAdapter.setOnItemCreate(object: MenuListAdapterCart.OnItemCreate{
+        cartAdapter.setOnItemCreate(object: MenuListAdapterCart.OnItemCreate{//카트 아이템이 생성 될 때 명령어
             override fun onItemCreate(v: View, data: MenuData, pos: Int) {
                 v.X_button_cart.setOnClickListener {
                     //Toast.makeText(v.context, "${data.toString()} ClickXXX", Toast.LENGTH_SHORT).show()
