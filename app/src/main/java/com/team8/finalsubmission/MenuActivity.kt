@@ -40,9 +40,9 @@ class MenuActivity : AppCompatActivity(){
     lateinit var cartManager : LinearLayoutManager
     lateinit var cart: ArrayList<MenuData> // 카트 데이터 배열
 
-    lateinit var	databaseMenu: DatabaseReference //메뉴 데이터베이스
-    lateinit var  databaseCategory:DatabaseReference //카테고리 데이터베이스
-    var	itemCount:	Long	=	0
+    lateinit var databaseMenu: DatabaseReference //메뉴 데이터베이스
+    lateinit var databaseCategory:DatabaseReference //카테고리 데이터베이스
+    var	itemCount: Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

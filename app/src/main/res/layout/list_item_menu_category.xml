@@ -8,9 +8,11 @@
     android:layout_gravity="center"
     android:orientation="vertical">
 
-    <Button
+    <android.widget.Button
         android:id="@+id/CategoryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/light_yellow"
+        android:layout_margin="5dp"
         android:text="Button" />
 </LinearLayout>
