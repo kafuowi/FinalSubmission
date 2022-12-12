@@ -11,22 +11,22 @@
 
     <LinearLayout
         android:id="@+id/layoutListItem"
-        android:layout_width="240dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_marginHorizontal="20dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/CartItemImage"
-            android:layout_width="34dp"
+            android:layout_width="28dp"
             android:layout_height="27dp"
             android:background="@drawable/ic_launcher_background"
             android:src="@drawable/ic_launcher_foreground" />
 
         <TextView
             android:id="@+id/textListTitle"
-            android:layout_width="109dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Title 1"
@@ -34,19 +34,23 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/X_button_cart"
+            android:id="@+id/ItemCount"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:text="0"
+            android:textAlignment="textEnd" />
+
+        <TextView
+            android:id="@+id/X_button_cart"
+            android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="X"
+            android:textAlignment="textEnd"
             android:textColor="#FF0000" />
-
-        <TextView
-            android:id="@+id/ItemCount"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="TextView" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

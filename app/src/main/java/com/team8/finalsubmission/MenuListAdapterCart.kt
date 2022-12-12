@@ -18,13 +18,22 @@ class MenuListAdapterCart(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
     interface OnItemClickListener{
         fun onItemClick(v:View, data: MenuData, pos : Int)
     }
+    
     private var listener : OnItemClickListener? = null
-    fun setOnItemClickListener(listener : OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+    interface OnItemCreate{
+        fun onItemCreate(v:View, data: MenuData, pos : Int)
+    }
+    private var create: OnItemCreate?=null
+    fun setOnItemCreate(create: OnItemCreate){
+        this.create = create
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.list_grid_item_cart_menu, parent, false)
 
+        
         return ListAdapter(view)
     }
 
@@ -39,6 +48,7 @@ class MenuListAdapterCart(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
             .into(holder.layout.CartItemImage) // 이미지를 넣을 뷰
 
 
+        create?.onItemCreate(holder.layout,list[position],position)
 
         holder.layout.layoutListItem.setOnClickListener {
             listener?.onItemClick(holder.layout,list[position],position)
@@ -50,4 +60,10 @@ class MenuListAdapterCart(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
     override fun getItemCount(): Int {
         return list.size
     }
+
+    fun setOnItemCreate(create: MenuListAdapterCart.OnItemCreate, function: () -> Unit) {
+
+    }
+
+
 }

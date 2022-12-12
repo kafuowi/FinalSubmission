@@ -3,16 +3,12 @@ package com.team8.finalsubmission
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -24,11 +20,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
-import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
-import kotlinx.android.synthetic.main.list_grid_item_menu.view.*
+import kotlinx.android.synthetic.main.list_grid_item_cart_menu.view.*
 import kotlinx.android.synthetic.main.menudialog.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MenuActivity : AppCompatActivity(){
@@ -85,6 +78,27 @@ class MenuActivity : AppCompatActivity(){
 
          cartManager = LinearLayoutManager(this)//장바구니 리스트 매니저
          cartAdapter = MenuListAdapterCart(cart)//장바구니 어댑터 매니저
+        cartAdapter.setOnItemCreate(object: MenuListAdapterCart.OnItemCreate{
+            override fun onItemCreate(v: View, data: MenuData, pos: Int) {
+                v.X_button_cart.setOnClickListener {
+                    //Toast.makeText(v.context, "${data.toString()} ClickXXX", Toast.LENGTH_SHORT).show()
+                    cart.removeAt(pos)
+                    refreshCart(cartManager,cartAdapter)
+                }
+            }
+
+        })
+
+            /*.setOnItemClickListener(object: MenuListAdapterCart.OnItemClickListener {
+                override fun onItemClick(v: View, data: MenuData, pos: Int) {
+
+                v.X_button_cart.setOnClickListener {
+                    Toast.makeText(v.context, "${data.toString()} ClickXXX", Toast.LENGTH_SHORT).show()
+                    cart.removeAt(pos)
+                    refreshCart(cartManager,cartAdapter)
+                }
+            }
+        })*/
         refreshCart(cartManager,cartAdapter)
 
 
@@ -142,6 +156,7 @@ class MenuActivity : AppCompatActivity(){
 
     }
     fun refreshCart(cartManager :LinearLayoutManager, cartAdapter: MenuListAdapterCart){// 카트 새로고침
+
         var recyclerCart = menuRecyclerCartView.apply{
             setHasFixedSize(true)
             layoutManager = cartManager
@@ -190,7 +205,7 @@ class MenuActivity : AppCompatActivity(){
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
                     override fun onItemClick(v: View, data: MenuData, pos: Int) {//그리드 아이템 click listener
-                        Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
                         var menuCount =0
                         val builder = AlertDialog.Builder(v.context)
@@ -202,9 +217,11 @@ class MenuActivity : AppCompatActivity(){
                             .setPositiveButton("Start",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // Start 버튼 선택 시 수행
-                                    cart.add(MenuData(data))
-                                    cart.last().select_count=menuCount
-                                    refreshCart(cartManager,cartAdapter)
+                                    if(menuCount>=1) {
+                                        cart.add(MenuData(data))
+                                        cart.last().select_count = menuCount
+                                        refreshCart(cartManager, cartAdapter)
+                                    }
 
                                 })
                             .setNegativeButton("Cancel",
