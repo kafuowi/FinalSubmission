@@ -40,6 +40,7 @@ class MenuActivity : AppCompatActivity(){
     lateinit var cartAdapter : MenuListAdapterCart
     lateinit var cartManager : LinearLayoutManager
     lateinit var cart: ArrayList<MenuData> // 카트 데이터 배열
+    lateinit var cartCount: ArrayList<Int>
 
     lateinit var databaseMenu: DatabaseReference //메뉴 데이터베이스
     lateinit var databaseCategory:DatabaseReference //카테고리 데이터베이스
@@ -59,6 +60,7 @@ class MenuActivity : AppCompatActivity(){
         binding.returnButton.setOnClickListener {
             val intent = Intent(this, PaymentCheckActivity::class.java)
             intent.putExtra("cart",cart )
+            intent.putExtra("cartCount",cartCount)
             startActivity(intent)
         }
 
@@ -78,6 +80,7 @@ class MenuActivity : AppCompatActivity(){
 
         refreshCategory(categoryManager,categoryAdapter)//카테고리 리스트 갱신
         cart  = ArrayList<MenuData>()// 장바구니 데이터 변수
+        cartCount  = ArrayList<Int>()
 
 
          cartManager = LinearLayoutManager(this)//장바구니 리스트 매니저
@@ -198,7 +201,8 @@ class MenuActivity : AppCompatActivity(){
                             .setPositiveButton("Start",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // Start 버튼 선택 시 수행
-                                    cart.add(data)
+                                    cart.add(MenuData(data))
+                                    cart.last().select_count=menuCount
                                     refreshCart(cartManager,cartAdapter)
 
                                 })

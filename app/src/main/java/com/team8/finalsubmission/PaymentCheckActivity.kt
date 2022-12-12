@@ -17,6 +17,7 @@ class PaymentCheckActivity: AppCompatActivity() {
     lateinit var cartAdapter : MenuListAdapterCart
     lateinit var cartManager : LinearLayoutManager
     lateinit var cart: ArrayList<MenuData> // 카트 데이터 배열
+    lateinit var cartCount:ArrayList<Int>
 
     private val binding get() = mBinding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,7 @@ class PaymentCheckActivity: AppCompatActivity() {
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
         cart = intent.getSerializableExtra("cart") as ArrayList<MenuData>
+        cartCount = intent.getSerializableExtra("cartCount") as ArrayList<Int>
         binding.returnToMenuButton.setOnClickListener {
             finish()
         }

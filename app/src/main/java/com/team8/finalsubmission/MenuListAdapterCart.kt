@@ -30,6 +30,7 @@ class MenuListAdapterCart(var list: ArrayList<MenuData>): RecyclerView.Adapter<M
 
     override fun onBindViewHolder(holder: ListAdapter, position: Int) {
         holder.layout.textListTitle.text = list[position].name
+        holder.layout.ItemCount.text = list[position].select_count.toString()
         Glide.with(holder.layout)
             .load(list[position].imageURL) // 불러올 이미지 url
             .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
