@@ -1,5 +1,6 @@
 package com.team8.finalsubmission
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
@@ -28,8 +29,7 @@ class PaymentCheckActivity: AppCompatActivity() {
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
-        cart = intent.getSerializableExtra("cart") as ArrayList<MenuData>
-        cartCount = intent.getSerializableExtra("cartCount") as ArrayList<Int>
+        cart = intent.getSerializableExtra("cart") as ArrayList<MenuData>//
         binding.returnToMenuButton.setOnClickListener {
             finish()
         }
@@ -39,10 +39,16 @@ class PaymentCheckActivity: AppCompatActivity() {
         cartAdapter = MenuListAdapterCart(cart)//장바구니 어댑터 매니저
         refreshCart(cartManager,cartAdapter)
         var totalprice =0
-        for(i in cart){
+        for(i in cart){//총합계 출력
             totalprice+= i.price*i.select_count
         }
-        binding.totalPriceView.setText("총 "+totalprice.toString()+" 원")
+        binding.totalPriceView2.setText("총 "+totalprice.toString()+" 원")
+
+        binding.continuePaymentButton.setOnClickListener {
+            val intent = Intent(this, PaymentSelectActivity::class.java)
+            intent.putExtra("totalprice",totalprice)
+            startActivity(intent)
+        }
 
 
     }
