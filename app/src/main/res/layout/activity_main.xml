@@ -29,19 +29,6 @@
         app:layout_constraintVertical_bias="0.097" />
 
     <Button
-        android:id="@+id/add_menu_enter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="메뉴추가"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/order_enter_button"
-        app:layout_constraintHorizontal_bias="0.425"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.097" />
-
-    <Button
         android:id="@+id/mainpage_enter_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,41 +42,16 @@
         app:layout_constraintVertical_bias="0.097" />
 
     <Button
-        android:id="@+id/change_name_enter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:text="관리자/가격이름변경"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/order_enter_button"
-        app:layout_constraintHorizontal_bias="0.029"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_menu_enter_button"
-        app:layout_constraintVertical_bias="0.165" />
-
-    <Button
-        android:id="@+id/activity_manage_mode_menu_enter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="관리자/메뉴"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toEndOf="@+id/change_name_enter_button"
-        app:layout_constraintTop_toBottomOf="@+id/mainpage_enter_button"
-        app:layout_constraintVertical_bias="0.165" />
-
-    <Button
         android:id="@+id/manage_mode_enter_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="관리자/메뉴목록"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_name_enter_button"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintTop_toBottomOf="@+id/order_enter_button"
+        app:layout_constraintVertical_bias="0.13" />
 
     <Button
         android:id="@+id/order_tutorial_enter_button"
@@ -100,8 +62,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.56"
         app:layout_constraintStart_toStartOf="@+id/manage_mode_enter_button"
-        app:layout_constraintTop_toBottomOf="@+id/activity_manage_mode_menu_enter_button"
-        app:layout_constraintVertical_bias="0.159" />
+        app:layout_constraintTop_toBottomOf="@+id/order_enter_button"
+        app:layout_constraintVertical_bias="0.13" />
 
     <Button
         android:id="@+id/scan_qr_button"
@@ -110,9 +72,9 @@
         android:text="QR 인식"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintStart_toStartOf="@+id/order_tutorial_enter_button"
-        app:layout_constraintTop_toBottomOf="@+id/activity_manage_mode_menu_enter_button"
-        app:layout_constraintVertical_bias="0.159" />
+        app:layout_constraintTop_toBottomOf="@+id/mainpage_enter_button"
+        app:layout_constraintVertical_bias="0.13" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

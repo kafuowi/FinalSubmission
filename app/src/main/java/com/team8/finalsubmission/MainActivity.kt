@@ -31,20 +31,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
-        binding.addMenuEnterButton.setOnClickListener {
-            val intent = Intent(this, AddMenuActivity::class.java)
-            startActivity(intent)
-        }
         binding.mainpageEnterButton.setOnClickListener {
             val intent = Intent(this, MainPageActivity::class.java)
-            startActivity(intent)
-        }
-        binding.changeNameEnterButton.setOnClickListener {
-            val intent = Intent(this, ManageModeChangeNameActivity::class.java)
-            startActivity(intent)
-        }
-        binding.activityManageModeMenuEnterButton.setOnClickListener {
-            val intent = Intent(this, ManageModeMenuSelectActivity::class.java)
             startActivity(intent)
         }
         binding.manageModeEnterButton.setOnClickListener {
