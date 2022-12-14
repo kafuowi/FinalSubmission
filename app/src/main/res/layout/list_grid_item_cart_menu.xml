@@ -22,6 +22,7 @@
             android:layout_width="28dp"
             android:layout_height="27dp"
             android:background="@drawable/ic_launcher_background"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground" />
 
         <TextView

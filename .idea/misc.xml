@@ -20,8 +20,8 @@
         <entry key="app/src/main/res/layout/fragment_tutorial.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_tutorial2.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_tutorial3.xml" value="0.15070921985815602" />
-        <entry key="app/src/main/res/layout/list_grid_item_cart_menu.xml" value="0.23143115942028986" />
-        <entry key="app/src/main/res/layout/list_grid_item_menu.xml" value="0.19579533941236069" />
+        <entry key="app/src/main/res/layout/list_grid_item_cart_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/list_grid_item_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/list_item_menu_category.xml" value="0.1" />
         <entry key="app/src/main/res/layout/mainpage.xml" value="0.2028985507246377" />
         <entry key="app/src/main/res/layout/manage_mode_change_name_price.xml" value="0.36820652173913043" />
