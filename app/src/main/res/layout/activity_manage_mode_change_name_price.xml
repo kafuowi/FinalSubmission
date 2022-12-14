@@ -36,6 +36,7 @@
             android:text="새로운 이름 :" />
 
         <EditText
+            android:id="@+id/NewNameEditText"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -56,6 +57,7 @@
             android:textSize="20dp" />
 
         <EditText
+            android:id="@+id/NewPriceEditText"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -63,8 +65,9 @@
         ></LinearLayout>
 
     <Button
+        android:id="@+id/NewPriceNameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="확인"/>
+        android:text="확인" />
 
 </LinearLayout>

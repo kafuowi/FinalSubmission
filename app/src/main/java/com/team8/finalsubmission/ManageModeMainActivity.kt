@@ -7,9 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.support.v4.app.INotificationSideChannel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,24 +27,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.team8.finalsubmission.databinding.ActivitySelectMenuBinding
-import com.team8.finalsubmission.databinding.DialogAddMenuBinding
 import kotlinx.android.synthetic.main.activity_select_menu.*
-import kotlinx.android.synthetic.main.activity_select_menu.view.*
 import kotlinx.android.synthetic.main.dialog_add_category.view.*
 import kotlinx.android.synthetic.main.dialog_add_menu.view.*
 import kotlinx.android.synthetic.main.dialog_manage_mode_menu_selected.view.*
-import kotlinx.android.synthetic.main.menudialog.*
-import kotlinx.android.synthetic.main.menudialog.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ManageModeMainActivity: AppCompatActivity(){
     // 전역 변수로 바인딩 객체 선언
@@ -275,9 +265,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                 selectGallery()// 갤러리에서 사진 선택
 
             }
-            DialogView.change_price.setOnClickListener {
 
-            }
             builder
                 .setView(DialogView)
                 .setTitle("Title")
@@ -381,6 +369,11 @@ class ManageModeMainActivity: AppCompatActivity(){
                         var tempItem = list[pos]
                         val builder = AlertDialog.Builder(v.context)
                         val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.dialog_manage_mode_menu_selected, null)
+                        mDialogView.change_price.setOnClickListener {
+                            val intent = Intent(v.context, ManageModeChangeNameActivity::class.java)
+                            intent.putExtra("menu",data)
+                            startActivity(intent)
+                        }
                         builder
                             .setView(mDialogView)
                             .setTitle("Title")

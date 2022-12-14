@@ -49,14 +49,5 @@
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="매출 확인" />
-    <Button
-        android:id="@+id/go_back"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="120dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:textSize="30dp"
-        android:text="뒤로가기"
-        />
 </LinearLayout>
 
