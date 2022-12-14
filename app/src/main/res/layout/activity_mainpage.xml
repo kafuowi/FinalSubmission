@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/mainTitle"
-        android:layout_width="360dp"
-        android:layout_height="640dp"
+        android:layout_width="355dp"
+        android:layout_height="512dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/rabbit" />
 

@@ -8,8 +8,10 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/activity_mainpage.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/activity_manage_mode_menu_selected.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_payment_select.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_select_menu.xml" value="0.16" />
         <entry key="app/src/main/res/layout/add_menu.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/dialog_add_category.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/dialog_add_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_manage_mode_menu_selected.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2866847826086957" />

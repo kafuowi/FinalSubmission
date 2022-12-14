@@ -187,6 +187,83 @@ class ManageModeMainActivity: AppCompatActivity(){
 
         }
 
+
+
+        // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
+        // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
+        setContentView(binding.root)
+        databaseCategory	=	Firebase.database.getReference("menucategory")
+
+        var list :ArrayList<MenuData> = ArrayList<MenuData>() //메뉴 데이터 초기화
+        var listManager = GridLayoutManager(this, 3)//메뉴 그리드 매니저
+        var listAdapter = MenuListAdapterGrid(list)// 메뉴 리스트 어댑터
+
+        refreshMenuGrid(listManager,listAdapter)//메뉴 그리드 새로고침
+
+
+        var cart: ArrayList<MenuData> =ArrayList<MenuData>()//카트 데이터
+
+
+        var cartManager = LinearLayoutManager(this)//카트 레이아웃 매니저
+        var cartAdapter = MenuListAdapterCart(cart)// 카트 어댑터
+
+
+        refreshCart(cartManager,cartAdapter)//카트 새로고침
+
+        var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
+        var categoryManager = LinearLayoutManager(this)
+        var categoryAdapter = MenuListAdapterCategory(categories)
+
+
+        var currentCategory =""
+
+        refreshCategory(categoryManager,categoryAdapter)
+        databaseCategory.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {//데이터가 바뀔 때
+
+
+                //binding.textList.setText("")
+                Log.d("Category", "Count:	${snapshot.childrenCount}")
+                itemCount = snapshot.childrenCount
+                categories = ArrayList<CategoryData>()
+                for (item in snapshot.children) {//스냅샷의 모든 아이템 조회
+                    val key = item.key
+                    val category = item.getValue(CategoryData::class.java)
+                    //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
+                    if (category != null) {
+                        categories.add(category)
+                        Log.d("Category", "Name:	${category.name}")
+                    }
+                }
+                categoryAdapter = MenuListAdapterCategory(categories)
+                refreshCategory(categoryManager, categoryAdapter)
+                categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
+                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {//카테고리 click listener
+                        Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
+                            .show()
+
+                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}") //클릭한 카테고리 데이터베이스 가져오기
+                        refreshGridData(listManager,listAdapter)// 그리드 새로고침
+                        currentCategory = data.name
+                    }
+
+                }
+                )
+
+                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")//0번째 카테고리 데이터베이스 가져오기
+
+                refreshGridData(listManager,listAdapter)//그리드 새로고침
+                currentCategory = categories[0].name
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        )
         binding.returnButton.setOnClickListener { //메뉴추가버튼
             val IMAGE_PICK=1111
 
@@ -196,6 +273,9 @@ class ManageModeMainActivity: AppCompatActivity(){
             DialogView.menu_image_view.setOnClickListener{
                 imageGlideView = DialogView.menu_image_view
                 selectGallery()// 갤러리에서 사진 선택
+
+            }
+            DialogView.change_price.setOnClickListener {
 
             }
             builder
@@ -211,6 +291,7 @@ class ManageModeMainActivity: AppCompatActivity(){
 
                         tempItem.quantity=0
                         tempItem.serving=0
+                        tempItem.category=currentCategory
 
                         if (uriPhoto != null) {
                             var fileName =
@@ -241,78 +322,6 @@ class ManageModeMainActivity: AppCompatActivity(){
             builder.create()
             val mAlertDialog=builder.show()
         }
-
-        // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
-        // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
-        setContentView(binding.root)
-        databaseCategory	=	Firebase.database.getReference("menucategory")
-
-        var list :ArrayList<MenuData> = ArrayList<MenuData>() //메뉴 데이터 초기화
-        var listManager = GridLayoutManager(this, 3)//메뉴 그리드 매니저
-        var listAdapter = MenuListAdapterGrid(list)// 메뉴 리스트 어댑터
-
-        refreshMenuGrid(listManager,listAdapter)//메뉴 그리드 새로고침
-
-
-        var cart: ArrayList<MenuData> =ArrayList<MenuData>()//카트 데이터
-
-
-        var cartManager = LinearLayoutManager(this)//카트 레이아웃 매니저
-        var cartAdapter = MenuListAdapterCart(cart)// 카트 어댑터
-
-
-        refreshCart(cartManager,cartAdapter)//카트 새로고침
-
-        var categories :ArrayList<CategoryData> = ArrayList<CategoryData>()
-        var categoryManager = LinearLayoutManager(this)
-        var categoryAdapter = MenuListAdapterCategory(categories)
-
-        refreshCategory(categoryManager,categoryAdapter)
-        databaseCategory.addValueEventListener(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {//데이터가 바뀔 때
-
-
-                //binding.textList.setText("")
-                Log.d("Category", "Count:	${snapshot.childrenCount}")
-                itemCount = snapshot.childrenCount
-                categories = ArrayList<CategoryData>()
-                for (item in snapshot.children) {//스냅샷의 모든 아이템 조회
-                    val key = item.key
-                    val category = item.getValue(CategoryData::class.java)
-                    //binding.textList.append("name:	${menu?.name}:	password${menu?.password}	\n")
-                    if (category != null) {
-                        categories.add(category)
-                        Log.d("Category", "Name:	${category.name}")
-                    }
-                }
-                categoryAdapter = MenuListAdapterCategory(categories)
-                refreshCategory(categoryManager, categoryAdapter)
-                categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
-                    override fun onItemClick(v: View, data: CategoryData, pos: Int) {//카테고리 click listener
-                        Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
-                            .show()
-
-                        databaseMenu	=	Firebase.database.getReference("menus/${data.name}") //클릭한 카테고리 데이터베이스 가져오기
-                        refreshGridData(listManager,listAdapter)// 그리드 새로고침
-                    }
-
-                }
-                )
-
-                databaseMenu	=	Firebase.database.getReference("menus/${categories[0].name}")//0번째 카테고리 데이터베이스 가져오기
-
-                refreshGridData(listManager,listAdapter)//그리드 새로고침
-
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        }
-
-        )
-
 
 
 

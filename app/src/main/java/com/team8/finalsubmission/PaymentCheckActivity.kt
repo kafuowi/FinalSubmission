@@ -56,6 +56,7 @@ class PaymentCheckActivity: AppCompatActivity() {
         binding.continuePaymentButton.setOnClickListener {
             val intent = Intent(this, PaymentSelectActivity::class.java)
             intent.putExtra("totalprice",totalprice)
+            intent.putExtra("cart",cart)
             startActivity(intent)
         }
 

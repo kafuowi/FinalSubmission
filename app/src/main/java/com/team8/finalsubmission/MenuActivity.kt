@@ -231,6 +231,7 @@ class MenuActivity : AppCompatActivity(){
                         list.add(menu)
                     }
                 }
+                list.sortByDescending  { it.serving }//내림차순 정렬
 
                 Log.d("Fire1",	"Count:	")
                 listAdapter = MenuListAdapterGrid(list)

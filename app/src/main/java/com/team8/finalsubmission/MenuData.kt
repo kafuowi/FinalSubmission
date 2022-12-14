@@ -11,7 +11,8 @@ class MenuData() :Parcelable	{
     var	price:Int =0
     var quantity:Int =0
     var serving: Int=0
-    var select_count: Int=0;
+    var select_count: Int=0
+    var category: String =""
 
     constructor(parcel: Parcel) : this() {
         UID = parcel.readString().toString()
@@ -21,6 +22,7 @@ class MenuData() :Parcelable	{
         quantity = parcel.readInt()
         serving = parcel.readInt()
         select_count = parcel.readInt()
+        category =parcel.readString().toString()
 
     }
 
@@ -32,6 +34,7 @@ class MenuData() :Parcelable	{
         quantity = parcel.quantity
         serving = parcel.serving
         select_count = parcel.select_count
+        category =parcel.category
     }
 
     //constructor()	//	파이어베이스에서 데이터 변환을 위해서 필요
@@ -51,6 +54,7 @@ class MenuData() :Parcelable	{
         parcel.writeInt(quantity)
         parcel.writeInt(serving)
         parcel.writeInt(select_count)
+        parcel.writeString(category)
     }
 
     override fun describeContents(): Int {
