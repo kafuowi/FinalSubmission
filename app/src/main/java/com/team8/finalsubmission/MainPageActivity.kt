@@ -34,7 +34,17 @@ class MainPageActivity: AppCompatActivity(){
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
         binding.enterOrderMenu.setOnClickListener {
+
             val intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+            //버튼을 누르면 tts 종료
+            tts!!.stop()
+        }
+        binding.tutorialButton.setOnClickListener {
+
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra("tutorialintent",true)
+
             startActivity(intent)
             //버튼을 누르면 tts 종료
             tts!!.stop()
@@ -45,6 +55,7 @@ class MainPageActivity: AppCompatActivity(){
             if (doubleClick!!) {
                 //Toast.makeText(binding.root.context, "double click", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MenuActivity::class.java)
+
                 startActivity(intent)
                 tts!!.stop()
             }
