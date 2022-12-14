@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.orderTutorialEnterButton.setOnClickListener {
-            val intent = Intent(this, Tutorial::class.java)
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra("tutorialintent",true)
             startActivity(intent)
         }
         binding.scanQrButton.setOnClickListener{

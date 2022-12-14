@@ -9,6 +9,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -39,6 +42,10 @@ class MenuActivity : AppCompatActivity(){
     lateinit var databaseCategory:DatabaseReference //카테고리 데이터베이스
     var	itemCount: Long = 0
 
+    //튜토리얼 fragment
+    lateinit var transaction: FragmentTransaction
+    var presentFragment: Fragment? = null
+    lateinit var fragmentManager : FragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +56,30 @@ class MenuActivity : AppCompatActivity(){
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
         setContentView(binding.root)
+
+        val tutorialintent = intent
+        val t = tutorialintent.getBooleanExtra("tutorialintent",false)
+
+        if(t){
+            //튜토리얼 fragment
+            var firstFragment = TutorialFragment()
+            var secondFragment = TutorialFragment2()
+            var thirdFragment = TutorialFragment3()
+
+            fragmentManager = supportFragmentManager
+
+            replaceTransaction(firstFragment)
+            binding.fragmentTutorial.isClickable;
+
+            binding.fragmentTutorial.setOnClickListener {
+                if (presentFragment == firstFragment) {
+                    replaceTransaction(secondFragment)
+                } else {
+                    replaceTransaction(thirdFragment)
+                }
+            }
+
+        }
 
         binding.returnButton.setOnClickListener {
             val intent = Intent(this, PaymentCheckActivity::class.java)
@@ -265,5 +296,17 @@ class MenuActivity : AppCompatActivity(){
             }
         }
         )
+    }
+    //fragment
+    fun	replaceTransaction(fragment:	Fragment)	{
+        if(presentFragment ==	fragment)	{
+            Toast.makeText(this,	"음식을 골라주세요.",
+                Toast.LENGTH_SHORT).show()
+            binding.fragmentTutorial.visibility=View.INVISIBLE
+            return
+        }
+        transaction	=	fragmentManager.beginTransaction()
+        transaction.replace(binding.fragmentTutorial.id, fragment).commit()
+        presentFragment =	fragment
     }
 }

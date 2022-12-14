@@ -53,18 +53,18 @@ class Tutorial : AppCompatActivity(){
         var secondFragment = TutorialFragment2()
         var thirdFragment = TutorialFragment3()
 
-        fragmentManager = supportFragmentManager
+            fragmentManager = supportFragmentManager
 
-        replaceTransaction(firstFragment)
-        binding.fragmentTutorial.isClickable;
+            replaceTransaction(firstFragment)
+            binding.fragmentTutorial.isClickable;
 
-        binding.fragmentTutorial.setOnClickListener {
-            if(presentFragment==firstFragment){
-                replaceTransaction(secondFragment)
-            }else{
-                replaceTransaction(thirdFragment)
+            binding.fragmentTutorial.setOnClickListener {
+                if (presentFragment == firstFragment) {
+                    replaceTransaction(secondFragment)
+                } else {
+                    replaceTransaction(thirdFragment)
+                }
             }
-        }
 
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
