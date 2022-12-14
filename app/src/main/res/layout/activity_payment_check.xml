@@ -16,12 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/caffe_bene_logo" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/paymentCheckListView"
-        android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_width="303dp"
+        android:layout_height="269dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -77,8 +77,10 @@
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentCheckListView" />
+        app:layout_constraintTop_toBottomOf="@+id/paymentCheckListView"
+        app:layout_constraintVertical_bias="0.078" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
