@@ -80,6 +80,18 @@ class MenuActivity : AppCompatActivity(){
             }
 
         }
+        //이미지 두번 터치하면 관리자 메뉴
+        var doubleClick: Boolean? = false
+        binding.imageView.setOnClickListener {
+            if (doubleClick!!) {
+                //Toast.makeText(binding.root.context, "double click", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ManageModeMainActivity::class.java)
+
+                startActivity(intent)
+            }
+            doubleClick = true
+            android.os.Handler().postDelayed({ doubleClick = false }, 200)
+        }
 
         binding.returnButton.setOnClickListener {
             val intent = Intent(this, PaymentCheckActivity::class.java)
