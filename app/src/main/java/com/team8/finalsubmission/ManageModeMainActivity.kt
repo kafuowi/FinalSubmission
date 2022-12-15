@@ -347,8 +347,11 @@ class ManageModeMainActivity: AppCompatActivity(){
         if (a_result.resultCode == Activity.RESULT_OK) {
             a_result.data?.let {
                 tempData= a_result.data!!.getParcelableExtra("resultData")!!
+                if(mData.quantity!=tempData.quantity){
+                    DialogView.change_stock.setText("남은수량: "+tempData.quantity.toString())
+                }
                 mData = tempData
-                Toast.makeText(this, "${mData.name} Click!", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "${mData.name} Click!", Toast.LENGTH_SHORT).show()
 
             }
         }
@@ -382,18 +385,19 @@ class ManageModeMainActivity: AppCompatActivity(){
                         mData = MenuData(data)
                         var tempItem = list[pos]
                         val builder = AlertDialog.Builder(v.context)
-                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.dialog_manage_mode_menu_selected, null)
-                        mDialogView.change_price.setOnClickListener {
+                        mDialogView = LayoutInflater.from(v.context).inflate(R.layout.dialog_manage_mode_menu_selected, null)
+                        DialogView.change_price.setOnClickListener {
                             val intent = Intent(v.context, ManageModeChangeNameActivity::class.java)
                             intent.putExtra("menu",mData)
                             startForResult.launch(intent)
                         }
-                        mDialogView.change_stock.setOnClickListener {
+                        DialogView.change_stock.setOnClickListener {
                             val intent = Intent(v.context, ManageModeChangeStockCountActivity::class.java)
                             intent.putExtra("menu",mData)
                             startForResult.launch(intent)
                         }
-                        mDialogView.check_sales.setText("판매량: "+mData.serving.toString())
+                        DialogView.change_stock.setText("남은수량: "+mData.quantity.toString())
+                        DialogView.check_sales.setText("판매량: "+mData.serving.toString())
                         builder
                             .setView(mDialogView)
                             .setTitle("메뉴 현황")
@@ -410,7 +414,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                                                     taskSnapshot -> // 업로드 정보를 담는다
                                                 taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { it ->
                                                     mData.imageURL = it.toString()
-                                                    Toast.makeText(mDialogView.context, it.toString(), Toast.LENGTH_SHORT)
+                                                    Toast.makeText(DialogView.context, it.toString(), Toast.LENGTH_SHORT)
                                                         .show()
 
                                                     databaseMenu.child(tempItem.UID).setValue(mData);
@@ -430,16 +434,16 @@ class ManageModeMainActivity: AppCompatActivity(){
 // Create the AlertDialog object and return it
                         builder.create()
                         val mAlertDialog=builder.show()
-                        Glide.with(mDialogView)
+                        Glide.with(DialogView)
                             .load(list[pos].imageURL) // 불러올 이미지 url
                             .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
                             .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
                             .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
-                            .into(mDialogView.selected_menu_image) // 이미지를 넣을 뷰
+                            .into(DialogView.selected_menu_image) // 이미지를 넣을 뷰
 
-                        mDialogView.change_image_name.setOnClickListener {//이미지 클릭 listener
+                        DialogView.change_image_name.setOnClickListener {//이미지 클릭 listener
 
-                            imageGlideView = mDialogView.selected_menu_image//
+                            imageGlideView = DialogView.selected_menu_image//
                             selectGallery()
 
                         }
