@@ -244,8 +244,8 @@ class MenuActivity : AppCompatActivity(){
 
                         builder
                             .setView(mDialogView)
-                            .setTitle("Title")
-                            .setPositiveButton("Start",
+                            .setTitle("메뉴선택")
+                            .setPositiveButton("선택",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // Start 버튼 선택 시 수행
                                     if(menuCount>=1) {
@@ -255,7 +255,7 @@ class MenuActivity : AppCompatActivity(){
                                     }
 
                                 })
-                            .setNegativeButton("Cancel",
+                            .setNegativeButton("취소",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // Cancel 버튼 선택 시 수행
                                 })

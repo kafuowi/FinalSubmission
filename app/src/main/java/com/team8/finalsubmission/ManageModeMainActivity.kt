@@ -267,8 +267,8 @@ class ManageModeMainActivity: AppCompatActivity(){
 
             builder
                 .setView(DialogView)
-                .setTitle("Title")
-                .setPositiveButton("Start",
+                .setTitle("메뉴 생성")
+                .setPositiveButton("생성",
                     DialogInterface.OnClickListener { dialog, id ->
                         val tempItem :MenuData = MenuData()
                         tempItem.name = DialogView.menu_name_edit_text.text.toString()
@@ -301,7 +301,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                         }
 
                     })
-                .setNegativeButton("Cancel",
+                .setNegativeButton("취소",
                     DialogInterface.OnClickListener { dialog, id ->
                         // Cancel 버튼 선택 시 수행
                     })
@@ -376,7 +376,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                         mDialogView.check_sales.setText("판매량: "+data.serving.toString())
                         builder
                             .setView(mDialogView)
-                            .setTitle("Title")
+                            .setTitle("메뉴 현황")
                             .setPositiveButton("확인",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // 확인 버튼 선택 시 수행
@@ -400,7 +400,7 @@ class ManageModeMainActivity: AppCompatActivity(){
 
                                     }
                                 })
-                            .setNegativeButton("Cancel",
+                            .setNegativeButton("취소",
                                 DialogInterface.OnClickListener { dialog, id ->
                                     // Cancel 버튼 선택 시 수행
                                 })
