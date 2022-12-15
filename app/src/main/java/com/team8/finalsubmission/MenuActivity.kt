@@ -156,7 +156,7 @@ class MenuActivity : AppCompatActivity(){
 
                 categoryAdapter.setOnItemClickListener(object : MenuListAdapterCategory.OnItemClickListener {
                     override fun onItemClick(v: View, data: CategoryData, pos: Int) {//카테고리 선택 click listener
-                        Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
+                        //Toast.makeText(v.context, "${data.name} Click!", Toast.LENGTH_SHORT)
                             .show()
 
                         databaseMenu	=	Firebase.database.getReference("menus/${data.name}")//클릭한 카테고리 데이터베이스 가져오기
