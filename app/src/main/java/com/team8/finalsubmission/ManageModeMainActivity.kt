@@ -388,6 +388,11 @@ class ManageModeMainActivity: AppCompatActivity(){
                             intent.putExtra("menu",mData)
                             startForResult.launch(intent)
                         }
+                        mDialogView.change_stock.setOnClickListener {
+                            val intent = Intent(v.context, ManageModeChangeStockCountActivity::class.java)
+                            intent.putExtra("menu",mData)
+                            startForResult.launch(intent)
+                        }
                         mDialogView.check_sales.setText("판매량: "+mData.serving.toString())
                         builder
                             .setView(mDialogView)

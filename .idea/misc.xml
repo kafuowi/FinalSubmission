@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2866847826086957" />
         <entry key="app/src/main/res/layout/activity_mainpage.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/activity_manage_mode_change_name_price.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_manage_mode_change_stock.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/activity_manage_mode_menu_selected.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_payment_check.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_payment_select.xml" value="0.1" />

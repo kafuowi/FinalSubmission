@@ -237,50 +237,55 @@ class MenuActivity : AppCompatActivity(){
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
                     override fun onItemClick(v: View, data: MenuData, pos: Int) {//그리드 아이템 click listener
                         //Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
+                        if(data.quantity>0){
+                            var menuCount =0
+                            val builder = AlertDialog.Builder(v.context)
+                            val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)//dialog inflater
 
-                        var menuCount =0
-                        val builder = AlertDialog.Builder(v.context)
-                        val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.menudialog, null)//dialog inflater
+                            builder
+                                .setView(mDialogView)
+                                .setTitle("메뉴선택")
+                                .setPositiveButton("선택",
+                                    DialogInterface.OnClickListener { dialog, id ->
+                                        // Start 버튼 선택 시 수행
+                                        if(menuCount>=1) {
+                                            cart.add(MenuData(data))
+                                            cart.last().select_count = menuCount
+                                            refreshCart(cartManager, cartAdapter)
+                                        }
 
-                        builder
-                            .setView(mDialogView)
-                            .setTitle("메뉴선택")
-                            .setPositiveButton("선택",
-                                DialogInterface.OnClickListener { dialog, id ->
-                                    // Start 버튼 선택 시 수행
-                                    if(menuCount>=1) {
-                                        cart.add(MenuData(data))
-                                        cart.last().select_count = menuCount
-                                        refreshCart(cartManager, cartAdapter)
-                                    }
+                                    })
+                                .setNegativeButton("취소",
+                                    DialogInterface.OnClickListener { dialog, id ->
+                                        // Cancel 버튼 선택 시 수행
+                                    })
+    // Create the AlertDialog object and return it
+                            builder.create()//dialog 생성
+                            val mAlertDialog=builder.show()
 
-                                })
-                            .setNegativeButton("취소",
-                                DialogInterface.OnClickListener { dialog, id ->
-                                    // Cancel 버튼 선택 시 수행
-                                })
-// Create the AlertDialog object and return it
-                        builder.create()//dialog 생성
-                        val mAlertDialog=builder.show()
-
-                        mDialogView.priceView.setText(data.price.toString()+" 원")
-                        Glide.with(mDialogView)
-                            .load(list[pos].imageURL) // 불러올 이미지 url
-                            .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
-                            .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
-                            .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
-                            .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
-                        mDialogView.MenuNumberMonitor.setText(menuCount.toString())//dialog 메뉴 개수 출력
-                        mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}//dialog 메뉴 뒤로가기
-                        mDialogView.ButtonMinus.setOnClickListener {//dialog 메뉴 개수 감소
-                            if(menuCount>0) {
-                                menuCount -= 1
+                            mDialogView.priceView.setText(data.price.toString()+" 원")
+                            Glide.with(mDialogView)
+                                .load(list[pos].imageURL) // 불러올 이미지 url
+                                .placeholder(R.drawable.ic_launcher_background) // 이미지 로딩 시작하기 전 표시할 이미지
+                                .error(R.drawable.rabbit) // 로딩 에러 발생 시 표시할 이미지
+                                .fallback(R.drawable.cat) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                                .into(mDialogView.dialogueImage) // 이미지를 넣을 뷰
+                            mDialogView.MenuNumberMonitor.setText(menuCount.toString())//dialog 메뉴 개수 출력
+                            mDialogView.backToMenu.setOnClickListener { mAlertDialog.dismiss()}//dialog 메뉴 뒤로가기
+                            mDialogView.ButtonMinus.setOnClickListener {//dialog 메뉴 개수 감소
+                                if(menuCount>0) {
+                                    menuCount -= 1
+                                    mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                                }
+                            }
+                            mDialogView.ButtonPlus.setOnClickListener {//dialog 메뉴 개수 증가
+                                if(menuCount<list[pos].quantity)
+                                menuCount+=1
                                 mDialogView.MenuNumberMonitor.setText(menuCount.toString())
                             }
                         }
-                        mDialogView.ButtonPlus.setOnClickListener {//dialog 메뉴 개수 증가
-                            menuCount+=1
-                            mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                        else{
+                            Toast.makeText(v.context, "매진입니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
 

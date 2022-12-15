@@ -41,6 +41,9 @@
         <activity android:name=".ManageModeChangeNameActivity">
 
         </activity>
+        <activity android:name=".ManageModeChangeStockCountActivity">
+
+        </activity>
         <activity android:name=".ManageModeMenuSelectActivity">
 
         </activity>
