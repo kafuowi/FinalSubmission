@@ -47,9 +47,9 @@ class ManageModeChangeNameActivity: AppCompatActivity(){
         var tempItem = MenuData(menu)
         tempItem.name = name
         tempItem.price=price
-        curMenu.setValue(tempItem)
 
-        finish()
+        this.setResult(RESULT_OK,intent.putExtra("resultData",tempItem));
+        finish();
 
 
     }

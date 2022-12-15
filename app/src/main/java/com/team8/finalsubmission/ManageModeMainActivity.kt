@@ -1,6 +1,7 @@
 package com.team8.finalsubmission
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -340,6 +341,19 @@ class ManageModeMainActivity: AppCompatActivity(){
         recyclerCategory.layoutManager =
             LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
     }
+    private lateinit var tempData:MenuData
+    lateinit var mData :MenuData
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ a_result ->
+        if (a_result.resultCode == Activity.RESULT_OK) {
+            a_result.data?.let {
+                tempData= a_result.data!!.getParcelableExtra("resultData")!!
+                mData = tempData
+                Toast.makeText(this, "${mData.name} Click!", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
     fun refreshGridData(gridManager: GridLayoutManager, gridAdapter: MenuListAdapterGrid){//메뉴 그리드 데이터 새로고침
 
         var listAdapter =gridAdapter
@@ -365,15 +379,16 @@ class ManageModeMainActivity: AppCompatActivity(){
                     override fun onItemClick(v: View, data: MenuData, pos: Int) {//메뉴 아이템 click listener
                         //Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
+                        mData = MenuData(data)
                         var tempItem = list[pos]
                         val builder = AlertDialog.Builder(v.context)
                         val mDialogView = LayoutInflater.from(v.context).inflate(R.layout.dialog_manage_mode_menu_selected, null)
                         mDialogView.change_price.setOnClickListener {
                             val intent = Intent(v.context, ManageModeChangeNameActivity::class.java)
-                            intent.putExtra("menu",data)
-                            startActivity(intent)
+                            intent.putExtra("menu",mData)
+                            startForResult.launch(intent)
                         }
-                        mDialogView.check_sales.setText("판매량: "+data.serving.toString())
+                        mDialogView.check_sales.setText("판매량: "+mData.serving.toString())
                         builder
                             .setView(mDialogView)
                             .setTitle("메뉴 현황")
@@ -389,15 +404,18 @@ class ManageModeMainActivity: AppCompatActivity(){
 
                                                     taskSnapshot -> // 업로드 정보를 담는다
                                                 taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { it ->
-                                                    tempItem.imageURL = it.toString()
+                                                    mData.imageURL = it.toString()
                                                     Toast.makeText(mDialogView.context, it.toString(), Toast.LENGTH_SHORT)
                                                         .show()
 
-                                                    databaseMenu.child(tempItem.UID).setValue(tempItem);
+                                                    databaseMenu.child(tempItem.UID).setValue(mData);
 
                                                 }
                                             }
 
+                                    }
+                                    else{
+                                        databaseMenu.child(tempItem.UID).setValue(mData);
                                     }
                                 })
                             .setNegativeButton("취소",
