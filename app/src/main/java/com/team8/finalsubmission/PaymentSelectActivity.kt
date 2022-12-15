@@ -56,6 +56,7 @@ class PaymentSelectActivity : AppCompatActivity() {
         }
         val intent = Intent(this, MainPageActivity::class.java)
         startActivity(intent)
+        finish()
 
 
     }

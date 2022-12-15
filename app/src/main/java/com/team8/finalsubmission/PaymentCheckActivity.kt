@@ -58,6 +58,7 @@ class PaymentCheckActivity: AppCompatActivity() {
             intent.putExtra("totalprice",totalprice)
             intent.putExtra("cart",cart)
             startActivity(intent)
+            finish()
         }
 
 
