@@ -364,7 +364,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                 listAdapter = MenuListAdapterGrid(list)
                 listAdapter.setOnItemClickListener(object : MenuListAdapterGrid.OnItemClickListener{
                     override fun onItemClick(v: View, data: MenuData, pos: Int) {//메뉴 아이템 click listener
-                        Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(v.context, "${data.toString()} Click!", Toast.LENGTH_SHORT).show()
 
                         var tempItem = list[pos]
                         val builder = AlertDialog.Builder(v.context)
