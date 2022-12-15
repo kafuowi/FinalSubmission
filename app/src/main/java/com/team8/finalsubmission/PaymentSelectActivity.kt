@@ -37,12 +37,6 @@ class PaymentSelectActivity : AppCompatActivity() {
         binding.PaymentButton2.setOnClickListener {
             paymentProcess(cart,totalprice)
         }
-        binding.PaymentButton3.setOnClickListener {
-            paymentProcess(cart,totalprice)
-        }
-        binding.PaymentButton4.setOnClickListener {
-            paymentProcess(cart,totalprice)
-        }
     }
     fun paymentProcess(cart: ArrayList<MenuData>,totalprice: Int){
         for(item in cart){

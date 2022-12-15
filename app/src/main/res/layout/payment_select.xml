@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -47,45 +48,35 @@
     </LinearLayout>
 
     <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:rowCount="2"
+        android:layout_width="391dp"
+        android:layout_height="369dp"
+        android:alignmentMode="alignMargins"
         android:columnCount="2"
         android:orientation="horizontal"
+        android:rowCount="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:alignmentMode="alignMargins">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="30dp"
-        android:text="결제\n수단 1"/>
+        <Button
+            android:layout_width="155dp"
+            android:layout_height="255dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="20dp"
+            android:text="현금\n결제"
+            android:textSize="30dp"/>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_marginTop="30dp"
-        android:layout_height="150dp"
-        android:layout_marginRight="30dp"
-        android:text="결제\n수단 2" />
+        <Button
+            android:layout_width="155dp"
+            android:layout_height="255dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:text="카드\n결제"
+            android:textSize="30dp"/>
 
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginLeft="30dp"
-        android:text="결제\n수단3"/>
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginRight="30dp"
-        android:text="결제\n수단4"/>
-
-        ></GridLayout>
+        >
+    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

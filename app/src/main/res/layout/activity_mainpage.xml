@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/mainTitle"
         android:layout_width="355dp"
-        android:layout_height="512dp"
+        android:layout_height="447dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/caffe_bene_icon" />
 
@@ -26,6 +26,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="20dp"
             android:text="처음이세요?"
+            android:background="@color/brown"
             android:textSize="20sp" />
 
         <Button
