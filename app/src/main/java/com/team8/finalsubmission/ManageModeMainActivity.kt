@@ -374,6 +374,7 @@ class ManageModeMainActivity: AppCompatActivity(){
                             intent.putExtra("menu",data)
                             startActivity(intent)
                         }
+                        mDialogView.check_sales.setText("판매량: "+data.serving.toString())
                         builder
                             .setView(mDialogView)
                             .setTitle("Title")
