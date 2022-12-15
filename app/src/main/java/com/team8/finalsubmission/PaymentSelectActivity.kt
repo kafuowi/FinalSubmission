@@ -49,7 +49,8 @@ class PaymentSelectActivity : AppCompatActivity() {
 
             val curMenu	=	Firebase.database.getReference("menus/${item.category}/${item.UID}")
             var tempItem = MenuData(item)
-            tempItem.serving+= tempItem.select_count
+            tempItem.serving += tempItem.select_count
+            tempItem.quantity -= tempItem.select_count
             tempItem.select_count=0
             curMenu.setValue(tempItem)
         }
