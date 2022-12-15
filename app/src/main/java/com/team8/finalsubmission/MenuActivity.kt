@@ -291,9 +291,10 @@ class MenuActivity : AppCompatActivity(){
                                 }
                             }
                             mDialogView.ButtonPlus.setOnClickListener {//dialog 메뉴 개수 증가
-                                if(menuCount<list[pos].quantity)
-                                menuCount+=1
-                                mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                                if(menuCount<list[pos].quantity) {
+                                    menuCount += 1
+                                    mDialogView.MenuNumberMonitor.setText(menuCount.toString())
+                                }
                             }
                         }
                         else{
