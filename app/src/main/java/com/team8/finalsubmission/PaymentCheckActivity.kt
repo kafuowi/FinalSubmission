@@ -3,6 +3,7 @@ package com.team8.finalsubmission
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +69,7 @@ class PaymentCheckActivity: AppCompatActivity() {
         refreshCart(cartManager,cartAdapter)
         var totalprice =0
         for(i in cart){//총합계 출력
+            Log.d("test", i.UID.toString())
             totalprice+= i.price*i.select_count
         }
         binding.totalPriceView2.setText("총 "+totalprice.toString()+" 원")

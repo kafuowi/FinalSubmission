@@ -3,10 +3,8 @@ package com.team8.finalsubmission
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.team8.finalsubmission.databinding.ActivityMainpageBinding
-import kotlinx.android.synthetic.main.activity_mainpage.view.*
 import java.util.*
 
 class MainPageActivity: AppCompatActivity(){
@@ -20,6 +18,7 @@ class MainPageActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainpageBinding.inflate(layoutInflater)
+        var qrCodeScan = QRCodeScan(this)
 
         tts = TextToSpeech(this){status ->
             if (status == TextToSpeech.SUCCESS) {
@@ -49,6 +48,18 @@ class MainPageActivity: AppCompatActivity(){
             //버튼을 누르면 tts 종료
             tts!!.stop()
         }
+
+        binding.recommendMenu.setOnClickListener{
+            val intent = Intent(this, RecommendActivity::class.java)
+            intent.putExtra("recommendintent",true)
+
+            startActivity(intent)
+        }
+
+        binding.qrMenu.setOnClickListener{
+            qrCodeScan.startQRScan()
+        }
+
         //더블 클릭시 주문화면으로
         var doubleClick: Boolean? = false
         binding.mainTitle.setOnClickListener {

@@ -57,6 +57,10 @@
         <activity android:name=".PaymentSelectActivity">
 
         </activity>
+
+        <activity android:name=".RecommendActivity">
+
+        </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class QRCodeScan(private val act: MainActivity) {
+class QRCodeScan(private val act: MainPageActivity) {
 
     lateinit var databaseMenu: DatabaseReference //메뉴 데이터베이스
 
@@ -66,18 +66,10 @@ class QRCodeScan(private val act: MainActivity) {
 
                                 }.await()
                     }
-                    nextIntent(list)
-
+                    val intent = Intent(act, PaymentCheckActivity::class.java)
+                    intent.putExtra("cart",list )
+                    startActivity(act, intent, Bundle.EMPTY)
                 }
-
-
-
-
-                    //여기부터 구현해야함
-                    //cart에 담고 주문 페이지 보이기 구현 해야합니다.
-
-
-
 
             }else{
                 //QRCode Scan result 없는경우

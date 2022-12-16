@@ -3,12 +3,7 @@ package com.team8.finalsubmission
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.team8.finalsubmission.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_main)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        var qrCodeScan = QRCodeScan(this)
 
         // getRoot 메서드로 레이아웃 내부의 최상위 위치 뷰의
         // 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시 합니다.
@@ -43,9 +37,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MenuActivity::class.java)
             intent.putExtra("tutorialintent",true)
             startActivity(intent)
-        }
-        binding.scanQrButton.setOnClickListener{
-            qrCodeScan.startQRScan()
         }
     }
 }
